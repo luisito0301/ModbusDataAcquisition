@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarDealer.DataAccess.FluentConfigurations.Common
+namespace ModbusData.DataAccess.FluentConfigurations.Common
 {
     public abstract class EntityTypeConfigurationBase<T>
         : IEntityTypeConfiguration<T>
