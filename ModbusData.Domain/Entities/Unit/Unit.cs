@@ -11,13 +11,11 @@ namespace ModbusData.Domain.Entities.Unit
 {
     public class Unit : Entity
     {
-      
-
-        public int Id { get; set; }
-        public string ManufactererName { get; set; }
-        public string Code { get; set; }
-        public string AreaName { get; set; }
-        public List<Variable> Variables { get; set; } = new List<Variable>();
+        public int Id { get; set; } //Identificador de la unidad
+        public string ManufactererName { get; set; } //Nombre del fabricante
+        public string Code { get; set; }  //Codigo asociado a la unidad
+        public string AreaName { get; set; } //Nombre del area donde se encuentran
+        public List<Variable> Variables { get; set; } = new List<Variable>(); //Variables asociadas a la unidad
 
         // Método para agregar una variable a la unidad
         public void AddVariable(Variable variable)

@@ -10,11 +10,9 @@ namespace ModbusData.Domain.Entities.Modbus_Network
 {
     public class ModbusNetwork : Entity
     {
-       
-
         public int Id { get; set; }
-        public string MasterIpAddress { get; set; }
-        public List<SlaveDevice> Slaves { get; set; } = new List<SlaveDevice>();
+        public string MasterIpAddress { get; set; }  //Direccion IP del dispositivo maestro
+        public List<SlaveDevice> Slaves { get; set; } = new List<SlaveDevice>();  //Dispositivos esclavos asociados a la red
 
         // Método para agregar un esclavo a la red
         public void AddSlave(SlaveDevice Slave)
