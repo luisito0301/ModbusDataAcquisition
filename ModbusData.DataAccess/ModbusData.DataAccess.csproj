@@ -17,14 +17,17 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="FluentConfigurations\ModbusNetwork\" />
-    <Folder Include="FluentConfigurations\Device\" />
-    <Folder Include="FluentConfigurations\Variable\" />
-    <Folder Include="FluentConfigurations\Unit\" />
+    <Folder Include="FluentConfigurations\Variables\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FluentConfigurations\Devices\SlaveDeviceEntityTypeConfigurationBase.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
