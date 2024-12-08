@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ModbusData.Domain.Entities.Variables
 {
 
+    public record  Variable(int fecha, int ip);
 
     public abstract class Variable : Entity
     {
@@ -19,7 +21,8 @@ namespace ModbusData.Domain.Entities.Variables
         public string Code { get; set; }  //Codigo de la variable
         TimeSpan SamplingPeriod { get; set; } // Intervalo de tiempo
         public int ModbusAddress { get; set; }  //Direccion en el protocolo ModBus
-        public Variable(int id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
+        public Variable(int id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)  
+
         {
             Id = id; 
             Name = name;  
