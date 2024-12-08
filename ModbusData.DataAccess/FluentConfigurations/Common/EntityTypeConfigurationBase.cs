@@ -16,7 +16,7 @@ namespace ModbusData.DataAccess.FluentConfigurations.Common
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            //MOC
+            //MOCKJHKJH
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired();
         }
