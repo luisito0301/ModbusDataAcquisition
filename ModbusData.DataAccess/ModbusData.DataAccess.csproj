@@ -17,7 +17,10 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="FluentConfigurations\" />
+    <Folder Include="FluentConfigurations\ModbusNetwork\" />
+    <Folder Include="FluentConfigurations\Device\" />
+    <Folder Include="FluentConfigurations\Variable\" />
+    <Folder Include="FluentConfigurations\Unit\" />
   </ItemGroup>
 
   <ItemGroup>
