@@ -1,5 +1,6 @@
 ﻿using ModbusData.Domain.Common;
 using ModbusData.Domain.Entities.Variables;
+using ModbusData.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace ModbusData.Domain.Entities.Device
     public class SlaveDevice : Entity
     {
         public int Id { get; set; }
-        public string IpAddress { get; set; }  ///Direccion IP del dispositivo
+        public IP IpAddress { get; set; }  ///Direccion IP del dispositivo
         public List<Variable> Variables { get; set; } = new List<Variable>();  ///Variables asociadas al dispositivo
-         public SlaveDevice(int id, string ipAddress, List<Variable> variables)
+         public SlaveDevice(int id, IP ipAddress, List<Variable> variables)
         {
             Id = id;
             IpAddress = ipAddress;
