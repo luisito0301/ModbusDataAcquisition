@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace ModbusData.DataAccess.FluentConfigurations.Variables
 {
-    public class VariableEntityTypeConfigurationBase : EntityTypeConfigurationBase<Variable>
+    public class VariableEntityTypeConfigurationBase : EntityTypeConfigurationBase<Variable> 
     {
         public override void Configure(EntityTypeBuilder<Variable> builder)
         {
-            builder.ToTable("Variable");
-            base.Configure(builder);
-            
+            base.Configure(builder); // Llama a la configuración base
+
+            // Configuración para SamplingPeriod
+            builder.Property(x => x.SamplingPeriod)
+                   .HasConversion(
+                       v => v.ToString(),
+                       v => TimeSpan.Parse(v))
+                   .IsRequired();
         }
     }
+
+
 }

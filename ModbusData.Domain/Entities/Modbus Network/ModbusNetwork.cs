@@ -11,7 +11,7 @@ namespace ModbusData.Domain.Entities.Modbus_Network
 {
     public class ModbusNetwork : Entity
     {
-        public int Id { get; set; }
+        public int Idd { get; set; }
         public IP MasterIpAddress { get; set; }  ///Direccion IP del dispositivo maestro
         public List<SlaveDevice> Slaves { get; set; } = new List<SlaveDevice>();  ///Dispositivos esclavos asociados a la red
 
@@ -19,7 +19,7 @@ namespace ModbusData.Domain.Entities.Modbus_Network
        
         public ModbusNetwork(int id, IP masterIpAddress, List<SlaveDevice> slaves)
         {
-            Id = id;
+            Idd = id;
             MasterIpAddress = masterIpAddress;
             Slaves = slaves;
         }

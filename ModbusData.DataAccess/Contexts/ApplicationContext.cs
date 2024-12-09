@@ -1,13 +1,15 @@
-﻿using ModbusData.Domain.Entities.Device; 
+﻿using ModbusData.Domain.Entities.Device;
 using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Sqlite.Infrastructure.Internal;
-using System.Drawing;
 using Microsoft.Data.Sqlite;
-
 using ModbusData.Domain.Entities.Modbus_Network;
+using ModbusData.Domain.ValueObjects;
+using ModbusData.DataAccess.FluentConfigurations.Devices;
+using ModbusData.DataAccess.FluentConfigurations.ModbusNetworks;
+using ModbusData.DataAccess.FluentConfigurations.Units;
+using ModbusData.DataAccess.FluentConfigurations.Variables;
 
 namespace ModbusData.DataAccess.Contexts
 {
@@ -16,32 +18,32 @@ namespace ModbusData.DataAccess.Contexts
     /// </summary>
     public class ApplicationContext : DbContext
     {
-        //Región destinada a la declaración de las tablas de las entidades base
-        #region Tables 
+        #region Tables
 
         /// <summary>
-        /// Tabla de clientes.
+        /// Tabla de redes Modbus.
         /// </summary>
-        public DbSet<Unit> Units { get; set; }
+        public DbSet<ModbusNetwork> ModbusNetworks { get; set; }
         /// <summary>
-        /// Tabla de órdenes de compra.
+        /// Tabla de dispositivos esclavos.
         /// </summary>
         public DbSet<SlaveDevice> SlaveDevices { get; set; }
         /// <summary>
-        /// Tabla de vehículos.
+        /// Tabla de variables.
         /// </summary>
-        public DbSet<ModbusNetwork> ModbusNetworks { get; set; }
-        public DbSet<Variable> Variables { get; set; }
+        public DbSet<AnalogicVariable> AnalogicVariables { get; set; }
+        public DbSet<DigitalVariable> DigitalVariables { get; set; }
+        /// <summary>
+        /// Tabla de unidades.
+        /// </summary>
+        public DbSet<Unit> Units { get; set; }
 
         #endregion
-
 
         /// <summary>
         /// Requerido por EntityFrameworkCore para migraciones.
         /// </summary>
-        public ApplicationContext()
-        {
-        }
+        public ApplicationContext() { }
 
         /// <summary>
         /// Inicializa un objeto <see cref="ApplicationContext"/>.
@@ -67,16 +69,22 @@ namespace ModbusData.DataAccess.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite();
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=modbusdata.db");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new SlaveDeviceEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ModbusNetworkEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalogicVariableEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new DigitalVariableEntityTypeConfiguration());
         }
-
 
         #region Helpers
 
@@ -86,12 +94,12 @@ namespace ModbusData.DataAccess.Contexts
         }
 
         #endregion
-
     }
 
-    // <summary>
-    // Habilita características en tiempo de diseño de la base de datos de la aplicación.
-    // </summary>
+    /// <summary>
+    /// Habilita características en tiempo de diseño de la base de datos de la aplicación.
+    /// Ej: Migraciones.
+    /// </summary>
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
         public ApplicationContext CreateDbContext(string[] args)
@@ -100,12 +108,12 @@ namespace ModbusData.DataAccess.Contexts
 
             try
             {
-                var connectionString = "Data Source = ModbusDataAcquisitionDB.sqlite";
+                var connectionString = "Data Source=modbusdata.db";
                 optionsBuilder.UseSqlite(connectionString);
             }
             catch (Exception)
             {
-                //handle errror here.. means DLL has no sattelite configuration file.
+                // Manejar error aquí.. significa que la DLL no tiene un archivo de configuración satelital.
                 throw;
             }
 

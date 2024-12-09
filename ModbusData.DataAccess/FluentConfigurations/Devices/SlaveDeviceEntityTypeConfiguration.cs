@@ -15,13 +15,20 @@ namespace ModbusData.DataAccess.FluentConfigurations.Devices
     {
         public override void Configure(EntityTypeBuilder<SlaveDevice> builder)
         {
-            //MOC
+            base.Configure(builder); // Llama a la configuración base
+
             builder.ToTable("SlaveDevices");
-            base.Configure(builder);
+
+            builder.Property(x => x.IpAddress)
+                   .HasConversion(
+                       ip => ip.ToString(),
+                       ipStr => IP.Parse(ipStr))
+                   .HasColumnName("IpAddress");
+
             builder.HasMany(x => x.Variables)
-                .WithOne().HasForeignKey(x => x.Id);
-            builder.OwnsOne(x => x.IpAddress);
-                
+                   .WithOne()
+                   .HasForeignKey(x => x.Id);
         }
     }
+
 }

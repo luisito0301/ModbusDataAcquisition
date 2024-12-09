@@ -11,7 +11,7 @@ namespace ModbusData.Domain.Entities.Unit
 {
     public class Unit : Entity
     {
-        public int Id { get; set; } ///Identificador de la unidad
+        public int Idd { get; set; } ///Identificador de la unidad
         public string ManufactererName { get; set; } ///Nombre del fabricante
         public string Code { get; set; }  ///Codigo asociado a la unidad
         public string AreaName { get; set; } ///Nombre del area donde se encuentran
@@ -29,11 +29,11 @@ namespace ModbusData.Domain.Entities.Unit
 
             _variables.Add(variable);
         }
-        public void RemoveVariabble(Variable variable)
+        public void RemoveVariable(Variable variable)
         {  _variables.Remove(variable); }
         public Unit(int id, string manufactererName, string code, string areaName, List<Variable> variables)
         {
-            Id = id;
+            Idd = id;
             ManufactererName = manufactererName;
             Code = code;
             AreaName = areaName;

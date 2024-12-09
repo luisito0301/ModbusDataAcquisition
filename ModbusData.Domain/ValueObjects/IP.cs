@@ -81,4 +81,8 @@ public class IP : ValueObject
         _octeto3 = octeto3;
         _octeto4 = octeto4;
     }
+    public static IP Parse(string ipStr) 
+    { var parts = ipStr.Split('.'); 
+        return new IP(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]), int.Parse(parts[3])); }
+
 }
