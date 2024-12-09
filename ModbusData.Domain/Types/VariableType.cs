@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModbusData.Domain.Types
 {
-    public enum VariableType //Tipo de Variable
+    public enum VariableType ///Tipo de Variable
     {
         Analogic,
         Digital
