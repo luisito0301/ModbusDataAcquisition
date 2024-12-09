@@ -1,4 +1,4 @@
-﻿using ModbusData.Domain.Entities.Device;
+﻿using ModbusData.Domain.Entities.Device; 
 using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables;
 using Microsoft.EntityFrameworkCore;
@@ -89,10 +89,9 @@ namespace ModbusData.DataAccess.Contexts
 
     }
 
-    /// <summary>
-    /// Habilita características en tiempo de diseño de la base de datos de la aplicación.
-    /// Ej: Migraciones.
-    /// </summary>
+    // <summary>
+    // Habilita características en tiempo de diseño de la base de datos de la aplicación.
+    // </summary>
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
         public ApplicationContext CreateDbContext(string[] args)

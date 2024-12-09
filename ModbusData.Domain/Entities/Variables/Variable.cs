@@ -12,33 +12,24 @@ namespace ModbusData.Domain.Entities.Variables
 
     public abstract class Variable : Entity
     {
-     
-
-        
-
-        public int Id { get; set; } 
-        public string Name { get; set; }
-        public VariableType Type { get; set; }
+        public int Id { get; set; } //Identificador de la variable
+        public string Name { get; set; }  //Nombre de la variable
+        public VariableType Type { get; set; }  // Tipo: Analogica o Digital
         public bool IsMeasurement { get; set; } // true si es medición, false si es acción de control
-        public string Code { get; set; }
+        public string Code { get; set; }  //Codigo de la variable
         TimeSpan SamplingPeriod { get; set; } // Intervalo de tiempo
-        public int ModbusAddress { get; set; }
+        public int ModbusAddress { get; set; }  //Direccion en el protocolo ModBus
         public Variable(int id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
         {
-            Id = id;
-            Name = name;
-            Type = type;
-            IsMeasurement = isMeasurement;
+            Id = id; 
+            Name = name;  
+            Type = type;  
+            IsMeasurement = isMeasurement; 
             Code = code;
             SamplingPeriod = samplingPeriod;
             ModbusAddress = modbusAddress;
         }
-
-        // Método para obtener valor de muestra
-        public virtual decimal GetSample()
-        {
-            throw new NotImplementedException("Este método debe ser implementado en las subclases.");
-        }
+        
     }
     
     }
