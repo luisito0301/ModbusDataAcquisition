@@ -22,5 +22,9 @@ namespace ModbusData.Domain.Entities.Modbus_Network
             MasterIpAddress = masterIpAddress;
             Slaves = slaves;
         }
+        ///<summary>
+        ///Requerido por EntityFramework
+        ///<summary>
+        protected ModbusNetwork() { }
     }
 }

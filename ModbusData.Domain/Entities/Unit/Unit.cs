@@ -19,6 +19,7 @@ namespace ModbusData.Domain.Entities.Unit
         public IReadOnlyCollection<Variable> Variables
         { 
             get { return _variables; }
+            protected set { _variables = value.ToList(); }
         }
         /// Método para agregar una variable a la unidad
         public void AddVariable(Variable variable)
@@ -38,5 +39,9 @@ namespace ModbusData.Domain.Entities.Unit
             AreaName = areaName;
             _variables = variables;
         }
+        ///<summary>
+        ///Requerido por EntityFramework
+        ///<summary>
+        protected Unit() { }
     }
 }

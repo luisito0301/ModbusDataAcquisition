@@ -19,5 +19,9 @@ namespace ModbusData.Domain.Entities.Device
             IpAddress = ipAddress;
             Variables = variables;
         }
+        ///<summary>
+        ///Requerido por EntityFramework
+        ///<summary>
+        protected SlaveDevice() { }
     }
 }

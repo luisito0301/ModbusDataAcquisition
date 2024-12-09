@@ -30,7 +30,11 @@ namespace ModbusData.Domain.Entities.Variables
             SamplingPeriod = samplingPeriod;
             ModbusAddress = modbusAddress;
         }
-        
+        ///<summary>
+        ///Requerido por EntityFramework
+        ///<summary>
+        protected Variable() { }
+
     }
     
     }
