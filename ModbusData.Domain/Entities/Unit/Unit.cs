@@ -28,6 +28,8 @@ namespace ModbusData.Domain.Entities.Unit
 
             _variables.Add(variable);
         }
+        public void RemoveVariabble(Variable variable)
+        {  _variables.Remove(variable); }
         public Unit(int id, string manufactererName, string code, string areaName, List<Variable> variables)
         {
             Id = id;
