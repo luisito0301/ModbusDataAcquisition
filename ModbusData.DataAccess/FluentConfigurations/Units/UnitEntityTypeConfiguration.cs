@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ModbusData.DataAccess.FluentConfigurations.Units
 {
-    public class UnitEntityTypeConfigurationBase : EntityTypeConfigurationBase<Unit>
+    public class UnitEntityTypeConfiguration : EntityTypeConfigurationBase<Unit>
     {
         public override void Configure(EntityTypeBuilder<Unit> builder)
         {

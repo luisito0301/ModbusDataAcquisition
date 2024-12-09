@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="FluentConfigurations\Devices\SlaveDeviceEntityTypeConfigurationBase.cs">
+    <Compile Update="FluentConfigurations\Devices\SlaveDeviceEntityTypeConfiguration.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>

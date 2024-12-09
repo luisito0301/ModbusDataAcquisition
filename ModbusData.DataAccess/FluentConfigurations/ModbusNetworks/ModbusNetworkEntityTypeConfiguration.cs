@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ModbusData.DataAccess.FluentConfigurations.ModbusNetworks
 {
-    public class ModbusNetworkEntityTypeConfigurationBase : EntityTypeConfigurationBase<ModbusNetwork>
+    public class ModbusNetworkEntityTypeConfiguration : EntityTypeConfigurationBase<ModbusNetwork>
     {
         public override void Configure(EntityTypeBuilder<ModbusNetwork> builder)
         {
@@ -20,6 +20,7 @@ namespace ModbusData.DataAccess.FluentConfigurations.ModbusNetworks
             base.Configure(builder);
             builder.HasMany(x => x.Slaves)
                 .WithOne().HasForeignKey(x => x.Id);
+            builder.OwnsOne(x => x.MasterIpAddress);
         }
     }
 }

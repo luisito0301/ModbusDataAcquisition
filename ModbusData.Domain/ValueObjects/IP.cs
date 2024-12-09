@@ -10,6 +10,7 @@ namespace ModbusData.Domain.ValueObjects;
 
 public class IP : ValueObject
 {
+    
     public int _octeto1;
     public int _octeto2;
     public int _octeto3;
@@ -70,5 +71,14 @@ public class IP : ValueObject
         yield return _octeto2;
         yield return _octeto3;
         yield return _octeto4;
+    }
+    protected IP() { }
+
+    public IP(int octeto1, int octeto2, int octeto3, int octeto4)
+    {
+        _octeto1 = octeto1;
+        _octeto2 = octeto2;
+        _octeto3 = octeto3;
+        _octeto4 = octeto4;
     }
 }
