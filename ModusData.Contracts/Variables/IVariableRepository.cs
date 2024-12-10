@@ -12,7 +12,7 @@ namespace ModbusData.Contract.Variables
         void AddVariable(Variable variable);
         void DeleteVariable(Variable variable);
         IEnumerable<T> GetAllVariables<T>() where T : Variable;
-        T? GetVariableById<T>(int id) where T : Variable;
+        T? GetVariableById<T>(Guid id) where T : Variable;
         void UpdateVariable(Variable variable);
     }
 

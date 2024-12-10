@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
+    <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
   </ItemGroup>
 
 </Project>
