@@ -11,8 +11,12 @@ using ModbusData.DataAccess.FluentConfigurations.Variables;
 
 namespace ModbusData.DataAccess.Contexts
 {
+     /// <summary>
+    /// Define la estructura de la base de datos de la aplicación.
+    /// </summary>
     public class ApplicationContext : DbContext
     {
+        //Región destinada a la declaración de las tablas de las entidades base
         #region Tables 
         public DbSet<ModbusNetwork> ModbusNetworks { get; set; }
         public DbSet<SlaveDevice> SlaveDevices { get; set; }
@@ -21,13 +25,28 @@ namespace ModbusData.DataAccess.Contexts
         public DbSet<Variable> Variables { get; set; }
         public DbSet<Unit> Units { get; set; }
         #endregion
+        /// <summary>
+        /// Requerido por EntityFrameworkCore para migraciones.
+        /// </summary>
         public ApplicationContext()
         {
         }
+        /// <summary>
+        /// Inicializa un objeto <see cref="ApplicationContext"/>.
+        /// </summary>
+        /// <param name="connectionString">
+        /// Cadena de conexión.
+        /// </param>
         public ApplicationContext(string connectionString)
             : base(GetOptions(connectionString))
         {
         }
+        /// <summary>
+        /// Inicializa un objeto <see cref="ApplicationContext"/>.
+        /// </summary>
+        /// <param name="options">
+        /// Opciones del contexto.
+        /// </param>
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,7 +72,10 @@ namespace ModbusData.DataAccess.Contexts
             return SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder(), connectionString).Options;
         }
     }
-
+     /// <summary>
+    /// Habilita características en tiempo de diseño de la base de datos de la aplicación.
+    /// Ej: Migraciones.
+    /// </summary>
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
         public ApplicationContext CreateDbContext(string[] args)
@@ -67,6 +89,7 @@ namespace ModbusData.DataAccess.Contexts
             }
             catch (Exception)
             {
+                 //handle errror here.. means DLL has no sattelite configuration file.
                 throw;
             }
 

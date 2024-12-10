@@ -7,6 +7,9 @@ using ModbusData.Contract.Devices;
 
 namespace ModbusData.DataAccess.Repositories.Devices
 {
+    /// <summary>
+    /// Implementación del repositorio <see cref="IDeviceRepository"/>.
+    /// </summary>
     public class DeviceRepository : RepositoryBase, IDeviceRepository
     {
         public DeviceRepository(ApplicationContext context) : base(context)

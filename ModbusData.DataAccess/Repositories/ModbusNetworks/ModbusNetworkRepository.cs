@@ -7,6 +7,9 @@ using ModbusData.Contract.ModbusNetworks;
 
 namespace ModbusData.DataAccess.Repositories.ModbusNetworks
 {
+    /// <summary>
+    /// Implementación del repositorio <see cref="IModbusNetworkRepository"/>.
+    /// </summary>
     public class ModbusNetworkRepository : RepositoryBase, IModbusNetworkRepository
     {
         public ModbusNetworkRepository(ApplicationContext context) : base(context)
