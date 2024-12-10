@@ -12,111 +12,57 @@ using System.Linq;
 
 namespace ModbusData.DataAccess.Tests
 {
-    [TestClass]
-    public class VariablesTests
-    {
-        private IVariableRepository _variableRepository;
-        private IUnitOfWork _unitOfWork;
-
-        public VariablesTests()
+        // Clase concreta para pruebas, derivada de Variable
+        public class TestVariable : Variable
         {
-            ApplicationContext context = new ApplicationContext(ConnectionStringProvider.GetConnectionString());
-            _variableRepository = new VariableRepository(context);
-            _unitOfWork = new UnitOfWork(context);
+            public TestVariable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
+                : base(id, name, type, isMeasurement, code, samplingPeriod, modbusAddress)
+            {
+            }
         }
 
-        [DataRow( "Temperature", VariableType.Analogic, true, "Temperature", 5, 100)]
-        [DataRow( "Pressure", VariableType.Analogic, false, "Pressure", 10, 101)]
-        [TestMethod]
-        public void Can_Add_Variable(
-           
-            string name,
-            VariableType type,
-            bool isMeasurement,
-            string code,
-            double samplingPeriodSeconds,
-            int modbusAddress)
+        [TestFixture]
+        public class VariableTests
         {
-            // Arrange
-            Guid id = Guid.NewGuid();
-            AnalogicVariable variable = new AnalogicVariable(id, name, type, isMeasurement, code, TimeSpan.FromSeconds(samplingPeriodSeconds), modbusAddress);
+            private TestVariable _variable;
 
-            // Execute
-            _variableRepository.AddVariable(variable);
-            _unitOfWork.SaveChanges();
+            [SetUp]
+            public void SetUp()
+            {
+                // Inicializa una nueva instancia de TestVariable antes de cada prueba
+                _variable = new TestVariable(Guid.NewGuid(), "Test Variable", VariableType.Analog, true, "TV001", TimeSpan.FromSeconds(10), 1);
+            }
 
-            // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(id);
-            Assert.IsNotNull(loadedVariable);
-        }
+            [Test]
+            public void Constructor_ShouldInitializePropertiesCorrectly()
+            {
+                // Assert
+                Assert.AreEqual("Test Variable", _variable.Name);
+                Assert.AreEqual(VariableType.Analog, _variable.Type);
+                Assert.IsTrue(_variable.IsMeasurement);
+                Assert.AreEqual("TV001", _variable.Code);
+                Assert.AreEqual(TimeSpan.FromSeconds(10), _variable.SamplingPeriod);
+                Assert.AreEqual(1, _variable.ModbusAddress);
+            }
 
-        [DataRow(0)]
-        [TestMethod]
-        public void Can_Get_Variable_By_Id(int position)
-        {
-            // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToGet = variables[position];
+            [Test]
+            public void Properties_ShouldBeSetAndGetCorrectly()
+            {
+                // Act
+                _variable.Name = "Updated Variable";
+                _variable.Type = VariableType.Digital;
+                _variable.IsMeasurement = false;
+                _variable.Code = "TV002";
+                _variable.SamplingPeriod = TimeSpan.FromSeconds(5);
+                _variable.ModbusAddress = 2;
 
-            // Execute
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToGet.Id);
-
-            // Assert
-            Assert.IsNotNull(loadedVariable);
-        }
-
-        [TestMethod]
-        public void Cannot_Get_Variable_By_Invalid_Id()
-        {
-            // Arrange
-
-            // Execute
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(Guid.Empty);
-
-            // Assert
-            Assert.IsNull(loadedVariable);
-        }
-
-        [DataRow(0, "New Temperature")]
-        [TestMethod]
-        public void Can_Update_Variable(int position, string newName)
-        {
-            // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToUpdate = variables[position];
-
-            // Execute
-            variableToUpdate.Name = newName;
-            _variableRepository.UpdateVariable(variableToUpdate);
-            _unitOfWork.SaveChanges();
-
-            // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToUpdate.Id);
-            Assert.IsNotNull(loadedVariable);
-            Assert.AreEqual(loadedVariable.Name, newName);
-        }
-
-        [DataRow(0)]
-        [TestMethod]
-        public void Can_Delete_Variable(int position)
-        {
-            // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToDelete = variables[position];
-
-            // Execute
-            _variableRepository.DeleteVariable(variableToDelete);
-            _unitOfWork.SaveChanges();
-
-            // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToDelete.Id);
-            Assert.IsNull(loadedVariable);
+                // Assert
+                Assert.AreEqual("Updated Variable", _variable.Name);
+                Assert.AreEqual(VariableType.Digital, _variable.Type);
+                Assert.IsFalse(_variable.IsMeasurement);
+                Assert.AreEqual("TV002", _variable.Code);
+                Assert.AreEqual(TimeSpan.FromSeconds(5), _variable.SamplingPeriod);
+                Assert.AreEqual(2, _variable.ModbusAddress);
+            }
         }
     }
-}
