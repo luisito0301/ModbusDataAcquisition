@@ -14,7 +14,6 @@ namespace ModbusData.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Idd = table.Column<int>(type: "INTEGER", nullable: false),
                     MasterIpAddress = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -27,7 +26,6 @@ namespace ModbusData.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Idd = table.Column<int>(type: "INTEGER", nullable: false),
                     ManufactererName = table.Column<string>(type: "TEXT", nullable: false),
                     Code = table.Column<string>(type: "TEXT", nullable: false),
                     AreaName = table.Column<string>(type: "TEXT", nullable: false)
@@ -42,7 +40,6 @@ namespace ModbusData.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Idd = table.Column<int>(type: "INTEGER", nullable: false),
                     IpAddress = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -61,7 +58,6 @@ namespace ModbusData.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Idd = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     IsMeasurement = table.Column<bool>(type: "INTEGER", nullable: false),

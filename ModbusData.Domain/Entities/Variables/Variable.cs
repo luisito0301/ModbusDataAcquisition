@@ -13,7 +13,7 @@ namespace ModbusData.Domain.Entities.Variables
 
     public abstract class Variable : Entity
     {
-        public int Idd { get; set; } // Identificador de la variable
+        
         public string Name { get; set; } // Nombre de la variable
         public VariableType Type { get; set; } // Tipo: Analógica o Digital
         public bool IsMeasurement { get; set; } // true si es medición, false si es acción de control
@@ -21,9 +21,9 @@ namespace ModbusData.Domain.Entities.Variables
         public TimeSpan SamplingPeriod { get; set; } // Intervalo de tiempo
         public int ModbusAddress { get; set; } // Dirección en el protocolo ModBus
 
-        public Variable(int id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
+        public Variable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress) : base(id)
         {
-            Idd = id;
+            
             Name = name;
             Type = type;
             IsMeasurement = isMeasurement;

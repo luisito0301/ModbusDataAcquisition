@@ -24,7 +24,7 @@ namespace ModbusData.Domain.Entities.Variables
 
         public Guid UnitID { get; set; } // Relación uno-muchos (variable-unidad)
 
-        public DigitalVariable(int id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
+        public DigitalVariable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
             : base(id, name, type, isMeasurement, code, samplingPeriod, modbusAddress)
         { }
         protected DigitalVariable() { }

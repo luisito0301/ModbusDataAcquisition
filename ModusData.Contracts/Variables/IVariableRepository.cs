@@ -14,6 +14,7 @@ namespace ModbusData.Contract.Variables
         IEnumerable<T> GetAllVariables<T>() where T : Variable;
         T? GetVariableById<T>(Guid id) where T : Variable;
         void UpdateVariable(Variable variable);
+        
     }
 
 }

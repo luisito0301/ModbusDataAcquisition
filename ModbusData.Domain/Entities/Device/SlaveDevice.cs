@@ -11,12 +11,11 @@ namespace ModbusData.Domain.Entities.Device
 {
     public class SlaveDevice : Entity
     {
-        public int Idd { get; set; }
         public IP IpAddress { get; set; }  ///Direccion IP del dispositivo
         public List<Variable> Variables { get; set; } = new List<Variable>();  ///Variables asociadas al dispositivo
-         public SlaveDevice(int id, IP ipAddress, List<Variable> variables)
+         public SlaveDevice(Guid id, IP ipAddress, List<Variable> variables):base(id)
         {
-            Idd = id;
+           
             IpAddress = ipAddress;
             Variables = variables;
         }

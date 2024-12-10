@@ -22,9 +22,6 @@ namespace ModbusData.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Idd")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -40,9 +37,6 @@ namespace ModbusData.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Idd")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MasterIpAddress")
                         .IsRequired()
@@ -68,9 +62,6 @@ namespace ModbusData.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Idd")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ManufactererName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -88,9 +79,6 @@ namespace ModbusData.DataAccess.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Idd")
-                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsMeasurement")
                         .HasColumnType("INTEGER");

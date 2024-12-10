@@ -11,15 +11,15 @@ namespace ModbusData.Domain.Entities.Modbus_Network
 {
     public class ModbusNetwork : Entity
     {
-        public int Idd { get; set; }
+       
         public IP MasterIpAddress { get; set; }  ///Direccion IP del dispositivo maestro
         public List<SlaveDevice> Slaves { get; set; } = new List<SlaveDevice>();  ///Dispositivos esclavos asociados a la red
 
         
        
-        public ModbusNetwork(int id, IP masterIpAddress, List<SlaveDevice> slaves)
+        public ModbusNetwork(Guid id, IP masterIpAddress, List<SlaveDevice> slaves): base(id)
         {
-            Idd = id;
+            
             MasterIpAddress = masterIpAddress;
             Slaves = slaves;
         }

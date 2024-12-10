@@ -15,12 +15,12 @@ namespace ModbusData.DataAccess.Repositories.Variables
 
         public void AddVariable(Variable variable)
         {
-            _context.Set<Variable>().Add(variable);
+            _context.Variables.Add(variable);
         }
 
         public void DeleteVariable(Variable variable)
         {
-            _context.Set<Variable>().Remove(variable);
+            _context.Variables.Remove(variable);
         }
 
         public IEnumerable<T> GetAllVariables<T>() where T : Variable
@@ -34,7 +34,7 @@ namespace ModbusData.DataAccess.Repositories.Variables
 
         public void UpdateVariable(Variable variable)
         {
-            _context.Set<Variable>().Update(variable);
+            _context.Variables.Update(variable);
         }
     }
 }
