@@ -17,10 +17,12 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+    <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
