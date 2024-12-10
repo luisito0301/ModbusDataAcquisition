@@ -30,11 +30,9 @@ namespace ModbusData.ConsoleApp
 
             string connectionString = "Data Source=modbusdata.db";
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            optionsBuilder.UseSqlite(connectionString);
-            ApplicationContext context = new ApplicationContext(optionsBuilder.Options);
+            ApplicationContext context = new ApplicationContext(connectionString);
 
-            context.Database.Migrate();
+            
 
             IUnitOfWork unitOfWork = new UnitOfWork(context);
             IVariableRepository variableRepository = new VariableRepository(context);
@@ -57,6 +55,7 @@ namespace ModbusData.ConsoleApp
             deviceRepository.AddDevice(device);
             unitRepository.AddUnit(unit);
             unitOfWork.SaveChanges();
+          
 
             var variables = variableRepository.GetAllVariables<AnalogicVariable>().ToList();
             var devices = deviceRepository.GetAllDevices().ToList();
