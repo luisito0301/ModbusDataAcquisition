@@ -1,14 +1,14 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.EntityFrameworkCore;
+using ModbusData.Contract.Variables;
+using ModbusData.Contract;
+using ModbusData.Domain.Types;
 using ModbusData.Domain.Entities.Variables;
 using ModbusData.DataAccess.Contexts;
 using ModbusData.DataAccess.Repositories.Variables;
 using ModbusData.DataAccess.Tests.Utilities; // Asumiendo que tienes una clase ConnectionStringProvider para obtener la cadena de conexión
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using ModbusData.Contract.Variables;
-using ModbusData.Contract;
-using ModbusData.Domain.Types;
 
 namespace ModbusData.DataAccess.Tests
 {
@@ -25,7 +25,7 @@ namespace ModbusData.DataAccess.Tests
             _unitOfWork = new UnitOfWork(context);
         }
 
-        [DataRow( "Temperature", VariableType.Analogic, true, "Temp", 5, 100)]
+        [DataRow( "Temperature", VariableType.Analogic, true, "Temperature", 5, 100)]
         [DataRow( "Pressure", VariableType.Analogic, false, "Pressure", 10, 101)]
         [TestMethod]
         public void Can_Add_Variable(

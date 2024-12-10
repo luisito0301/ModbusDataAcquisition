@@ -22,6 +22,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.DataAccess\ModbusData.DataAccess.csproj" />
+	  <ProjectReference Include="..\ModbusData.Contracts\ModbusData.Contracts.csproj" />
+	  <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
 </Project>
