@@ -15,7 +15,27 @@ namespace ModbusData.DataAccess.Repositories.ModbusNetworks
 
         public void AddModbusNetwork(ModbusNetwork network)
         {
-            _context.Set<ModbusNetwork>().Add(network);
+            // Check if the network is already being tracked
+            var existingNetwork = _context.Set<ModbusNetwork>().Local.FirstOrDefault(n => n.Id == network.Id);
+            if (existingNetwork == null)
+            {
+                _context.Set<ModbusNetwork>().Add(network);
+            }
+        }
+
+        public void UpdateModbusNetwork(ModbusNetwork network)
+        {
+            // Check if the network is already being tracked
+            var existingNetwork = _context.Set<ModbusNetwork>().Local.FirstOrDefault(n => n.Id == network.Id);
+            if (existingNetwork != null)
+            {
+                // Update the existing tracked entity
+                _context.Entry(existingNetwork).CurrentValues.SetValues(network);
+            }
+            else
+            {
+                _context.Set<ModbusNetwork>().Update(network);
+            }
         }
 
         public void DeleteModbusNetwork(ModbusNetwork network)
@@ -33,9 +53,6 @@ namespace ModbusData.DataAccess.Repositories.ModbusNetworks
             return _context.Set<ModbusNetwork>().FirstOrDefault(x => x.Id == id);
         }
 
-        public void UpdateModbusNetwork(ModbusNetwork network)
-        {
-            _context.Set<ModbusNetwork>().Update(network);
-        }
+      
     }
 }

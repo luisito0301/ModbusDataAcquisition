@@ -1,29 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ModbusData.DataAccess.FluentConfigurations.Common;
+using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModbusData.DataAccess.FluentConfigurations.Variables
 {
+    /// <summary>
+    /// Configures the AnalogicVariable entity for Entity Framework Core.
+    /// </summary>
     public class AnalogicVariableEntityTypeConfiguration : IEntityTypeConfiguration<AnalogicVariable>
     {
-        public  void Configure(EntityTypeBuilder<AnalogicVariable> builder)
+        /// <summary>
+        /// Configures the AnalogicVariable entity type.
+        /// </summary>
+        /// <param name="builder">The builder used to configure the entity type.</param>
+        public void Configure(EntityTypeBuilder<AnalogicVariable> builder)
         {
-
             builder.ToTable("AnalogicVariables");
-            builder.HasBaseType(typeof(Variable));
+
+            // Configure the base type for TPH inheritance
+            builder.HasBaseType<Variable>();
+
+            // Configure the Value property with precision
             builder.Property(x => x.Value)
-                   .HasPrecision(18, 2); // Configurar precisión para dos cifras decimales
+                   .HasPrecision(18, 2); // Configure precision for two decimal places
+
+           
         }
     }
-
-
-
-
-
 }

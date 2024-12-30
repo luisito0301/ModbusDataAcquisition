@@ -16,24 +16,24 @@ namespace ModbusData.DataAccess.Contexts
         #region Tables 
         public DbSet<ModbusNetwork> ModbusNetworks { get; set; }
         public DbSet<SlaveDevice> SlaveDevices { get; set; }
-        public DbSet<AnalogicVariable> AnalogicVariables { get; set; }
-        public DbSet<DigitalVariable> DigitalVariables { get; set; }
         public DbSet<Variable> Variables { get; set; }
         public DbSet<Unit> Units { get; set; }
         #endregion
-        public ApplicationContext()
-        {
-        }
+
+        public ApplicationContext() { }
+
         public ApplicationContext(string connectionString)
-            : base(GetOptions(connectionString))
-        {
-        }
+            : base(GetOptions(connectionString)) { }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite();
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=modbusdata.db"); // Default connection string
+
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +50,9 @@ namespace ModbusData.DataAccess.Contexts
 
         private static DbContextOptions GetOptions(string connectionString)
         {
-            return SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder(), connectionString).Options;
+            return new DbContextOptionsBuilder<ApplicationContext>()
+                .UseSqlite(connectionString)
+                .Options;
         }
     }
 
@@ -62,12 +64,13 @@ namespace ModbusData.DataAccess.Contexts
 
             try
             {
-                var connectionString = "Data Source=modbusdata.db";
+                var connectionString = "Data Source=modbusdata.db"; // Consider moving to configuration
                 optionsBuilder.UseSqlite(connectionString);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception or provide more context
+                throw new InvalidOperationException("Could not create a DbContext for design time.", ex);
             }
 
             return new ApplicationContext(optionsBuilder.Options);

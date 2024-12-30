@@ -90,7 +90,7 @@ namespace ModbusData.DataAccess.Tests
             AnalogicVariable variableToUpdate = variables[position];
 
             // Execute
-            variableToUpdate.Name = newName;
+            
             _variableRepository.UpdateVariable(variableToUpdate);
             _unitOfWork.SaveChanges();
 

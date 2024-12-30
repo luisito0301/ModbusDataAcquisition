@@ -15,7 +15,27 @@ namespace ModbusData.DataAccess.Repositories.Devices
 
         public void AddDevice(SlaveDevice device)
         {
-            _context.Set<SlaveDevice>().Add(device);
+            // Check if the device is already being tracked
+            var existingDevice = _context.Set<SlaveDevice>().Local.FirstOrDefault(d => d.Id == device.Id);
+            if (existingDevice == null)
+            {
+                _context.Set<SlaveDevice>().Add(device);
+            }
+        }
+
+        public void UpdateDevice(SlaveDevice device)
+        {
+            // Check if the device is already being tracked
+            var existingDevice = _context.Set<SlaveDevice>().Local.FirstOrDefault(d => d.Id == device.Id);
+            if (existingDevice != null)
+            {
+                // Update the existing tracked entity
+                _context.Entry(existingDevice).CurrentValues.SetValues(device);
+            }
+            else
+            {
+                _context.Set<SlaveDevice>().Update(device);
+            }
         }
 
         public void DeleteDevice(SlaveDevice device)
@@ -33,9 +53,6 @@ namespace ModbusData.DataAccess.Repositories.Devices
             return _context.Set<SlaveDevice>().FirstOrDefault(x => x.Id == id);
         }
 
-        public void UpdateDevice(SlaveDevice device)
-        {
-            _context.Set<SlaveDevice>().Update(device);
-        }
+       
     }
 }

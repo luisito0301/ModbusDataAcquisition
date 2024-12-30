@@ -1,88 +1,78 @@
 ﻿using ModbusData.Domain.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-
-namespace ModbusData.Domain.ValueObjects;
-
-public class IP : ValueObject
+namespace ModbusData.Domain.ValueObjects
 {
-    
-    public int _octeto1;
-    public int _octeto2;
-    public int _octeto3;
-    public int _octeto4;
-
-    public int Octeto1
+    /// <summary>
+    /// Represents an IP address using four octets.
+    /// </summary>
+    public class IP : ValueObject
     {
-        get { return _octeto1; }
-        set
+        public int Octeto1 { get; private set; }
+        public int Octeto2 { get; private set; }
+        public int Octeto3 { get; private set; }
+        public int Octeto4 { get; private set; }
+
+        public override string ToString()
         {
-            if (value < 0 || value > 255)
-                throw new ArgumentOutOfRangeException(nameof(Octeto1), "El valor debe estar entre 0 y 255.");
-            _octeto1 = value;
+            return $"{Octeto1}.{Octeto2}.{Octeto3}.{Octeto4}";
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Octeto1;
+            yield return Octeto2;
+            yield return Octeto3;
+            yield return Octeto4;
+        }
+
+        // Parameterless constructor for EF
+        protected IP() { }
+
+        public IP(int octeto1, int octeto2, int octeto3, int octeto4)
+        {
+            SetOctets(octeto1, octeto2, octeto3, octeto4);
+        }
+
+        public static IP Parse(string ipStr)
+        {
+            var parts = ipStr.Split('.');
+            if (parts.Length != 4)
+            {
+                throw new FormatException("Invalid IP address format.");
+            }
+
+            try
+            {
+                return new IP(
+                    int.Parse(parts[0]),
+                    int.Parse(parts[1]),
+                    int.Parse(parts[2]),
+                    int.Parse(parts[3])
+                );
+            }
+            catch (FormatException)
+            {
+                throw new FormatException("Invalid IP address format.");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new ArgumentOutOfRangeException("Octet values must be between 0 and 255.");
+            }
+        }
+
+        private void SetOctets(int octeto1, int octeto2, int octeto3, int octeto4)
+        {
+            if (octeto1 < 0 || octeto1 > 255) throw new ArgumentOutOfRangeException(nameof(octeto1), "Value must be between 0 and 255.");
+            if (octeto2 < 0 || octeto2 > 255) throw new ArgumentOutOfRangeException(nameof(octeto2), "Value must be between 0 and 255.");
+            if (octeto3 < 0 || octeto3 > 255) throw new ArgumentOutOfRangeException(nameof(octeto3), "Value must be between 0 and 255.");
+            if (octeto4 < 0 || octeto4 > 255) throw new ArgumentOutOfRangeException(nameof(octeto4), "Value must be between 0 and 255.");
+
+            Octeto1 = octeto1;
+            Octeto2 = octeto2;
+            Octeto3 = octeto3;
+            Octeto4 = octeto4;
         }
     }
-
-    public int Octeto2
-    {
-        get { return _octeto2; }
-        set
-        {
-            if (value < 0 || value > 255)
-                throw new ArgumentOutOfRangeException(nameof(Octeto2), "El valor debe estar entre 0 y 255.");
-            _octeto2 = value;
-        }
-    }
-
-    public int Octeto3
-    {
-        get { return _octeto3; }
-        set
-        {
-            if (value < 0 || value > 255)
-                throw new ArgumentOutOfRangeException(nameof(Octeto3), "El valor debe estar entre 0 y 255.");
-            _octeto3 = value;
-        }
-    }
-
-    public int Octeto4
-    {
-        get { return _octeto4; }
-        set
-        {
-            if (value < 0 || value > 255)
-                throw new ArgumentOutOfRangeException(nameof(Octeto4), "El valor debe estar entre 0 y 255.");
-            _octeto4 = value;
-        }
-    }
-
-    public override string ToString()
-    {
-        return $"{Octeto1}.{Octeto2}.{Octeto3}.{Octeto4}";
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return _octeto1;
-        yield return _octeto2;
-        yield return _octeto3;
-        yield return _octeto4;
-    }
-    protected IP() { }
-
-    public IP(int octeto1, int octeto2, int octeto3, int octeto4)
-    {
-        _octeto1 = octeto1;
-        _octeto2 = octeto2;
-        _octeto3 = octeto3;
-        _octeto4 = octeto4;
-    }
-    public static IP Parse(string ipStr) 
-    { var parts = ipStr.Split('.'); 
-        return new IP(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]), int.Parse(parts[3])); }
-
 }

@@ -3,32 +3,33 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ModbusData.DataAccess.FluentConfigurations.Common;
 using ModbusData.Domain.Entities.Device;
 using ModbusData.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModbusData.DataAccess.FluentConfigurations.Devices
 {
+    /// <summary>
+    /// Configures the SlaveDevice entity for Entity Framework Core.
+    /// </summary>
     public class SlaveDeviceEntityTypeConfiguration : EntityTypeConfigurationBase<SlaveDevice>
     {
+        /// <summary>
+        /// Configures the SlaveDevice entity type.
+        /// </summary>
+        /// <param name="builder">The builder used to configure the entity type.</param>
         public override void Configure(EntityTypeBuilder<SlaveDevice> builder)
         {
-            base.Configure(builder); // Llama a la configuración base
+            base.Configure(builder); // Call the base configuration
 
             builder.ToTable("SlaveDevices");
 
+            // Configure the IpAddress property
             builder.Property(x => x.IpAddress)
                    .HasConversion(
-                       ip => ip.ToString(),
-                       ipStr => IP.Parse(ipStr))
-                   .HasColumnName("IpAddress");
+                       ip => ip.ToString(), // Convert IP to string for storage
+                       ipStr => IP.Parse(ipStr)) // Convert string back to IP
+                   .HasColumnName("IpAddress")
+                   .IsRequired(); // Assuming IpAddress is required
 
-            builder.HasMany(x => x.Variables)
-                   .WithOne()
-                   .HasForeignKey(x => x.Id);
+           
         }
     }
-
 }

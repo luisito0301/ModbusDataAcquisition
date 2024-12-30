@@ -20,6 +20,7 @@ namespace ModbusData.DataAccess.Migrations
             modelBuilder.Entity("ModbusData.Domain.Entities.Device.SlaveDevice", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IpAddress")
@@ -27,7 +28,12 @@ namespace ModbusData.DataAccess.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("IpAddress");
 
+                    b.Property<Guid?>("ModbusNetworkId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ModbusNetworkId");
 
                     b.ToTable("SlaveDevices", (string)null);
                 });
@@ -68,12 +74,13 @@ namespace ModbusData.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Unit", (string)null);
+                    b.ToTable("Units", (string)null);
                 });
 
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.Variable", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
@@ -90,23 +97,36 @@ namespace ModbusData.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("SamplingPeriod")
+                    b.Property<string>("SamplingPeriod")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SlaveDeviceId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UnitId1")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Variable");
+                    b.HasIndex("SlaveDeviceId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UnitId1");
+
+                    b.ToTable("Variables");
                 });
 
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.AnalogicVariable", b =>
                 {
                     b.HasBaseType("ModbusData.Domain.Entities.Variables.Variable");
-
-                    b.Property<Guid>("UnitID")
-                        .HasColumnType("TEXT");
 
                     b.Property<double>("Value")
                         .HasPrecision(18, 2)
@@ -118,9 +138,6 @@ namespace ModbusData.DataAccess.Migrations
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.DigitalVariable", b =>
                 {
                     b.HasBaseType("ModbusData.Domain.Entities.Variables.Variable");
-
-                    b.Property<Guid>("UnitID")
-                        .HasColumnType("TEXT");
 
                     b.Property<short>("Value")
                         .HasMaxLength(1024)
@@ -134,24 +151,24 @@ namespace ModbusData.DataAccess.Migrations
                 {
                     b.HasOne("ModbusData.Domain.Entities.Modbus_Network.ModbusNetwork", null)
                         .WithMany("Slaves")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModbusNetworkId");
                 });
 
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.Variable", b =>
                 {
                     b.HasOne("ModbusData.Domain.Entities.Device.SlaveDevice", null)
                         .WithMany("Variables")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("SlaveDeviceId");
+
+                    b.HasOne("ModbusData.Domain.Entities.Unit.Unit", null)
+                        .WithMany()
+                        .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ModbusData.Domain.Entities.Unit.Unit", null)
                         .WithMany("Variables")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId1");
                 });
 
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.AnalogicVariable", b =>

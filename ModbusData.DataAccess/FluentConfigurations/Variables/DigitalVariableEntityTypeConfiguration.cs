@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ModbusData.DataAccess.FluentConfigurations.Common;
+using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace ModbusData.DataAccess.FluentConfigurations.Variables
                    .HasColumnName("Value")
                    .HasMaxLength(1024)
                    .IsRequired();
+          
+          
         }
     }
 

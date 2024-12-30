@@ -1,28 +1,34 @@
-﻿
-using ModbusData.Domain.Types;
+﻿using ModbusData.Domain.Types;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModbusData.Domain.Entities.Variables
 {
+    /// <summary>
+    /// Represents an analog variable.
+    /// </summary>
     public class AnalogicVariable : Variable
     {
         private double _value;
+
+        /// <summary>
+        /// Gets or sets the value of the analog variable, rounded to two decimal places.
+        /// </summary>
         public double Value
         {
             get => _value;
             set => _value = Math.Round(value, 2);
         }
 
-        public Guid UnitID { get; set; } // Relación uno-muchos (variable-unidad)
+        /// <summary>
+        /// Gets or sets the identifier of the unit associated with the analog variable.
+        /// </summary>
+        
 
         public AnalogicVariable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
             : base(id, name, type, isMeasurement, code, samplingPeriod, modbusAddress)
         { }
+
+        // Required by Entity Framework
         protected AnalogicVariable() { }
     }
-
 }

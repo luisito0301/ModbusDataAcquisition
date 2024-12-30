@@ -1,29 +1,48 @@
 ﻿using ModbusData.Domain.Common;
-using ModbusData.Domain.Records;
 using ModbusData.Domain.Types;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModbusData.Domain.Entities.Variables
 {
-
-
+    /// <summary>
+    /// Base class for different types of variables.
+    /// </summary>
     public abstract class Variable : Entity
     {
-        
-        public string Name { get; set; } // Nombre de la variable
-        public VariableType Type { get; set; } // Tipo: Analógica o Digital
-        public bool IsMeasurement { get; set; } // true si es medición, false si es acción de control
-        public string Code { get; set; } // Código de la variable
-        public TimeSpan SamplingPeriod { get; set; } // Intervalo de tiempo
-        public int ModbusAddress { get; set; } // Dirección en el protocolo ModBus
+        /// <summary>
+        /// Gets the name of the variable.
+        /// </summary>
+        public string Name { get; init; } // Nombre de la variable
 
-        public Variable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress) : base(id)
+        /// <summary>
+        /// Gets the type of the variable (Analogic or Digital).
+        /// </summary>
+        public VariableType Type { get; init; } // Tipo: Analógica o Digital
+
+        /// <summary>
+        /// Gets a value indicating whether the variable is a measurement.
+        /// </summary>
+        public bool IsMeasurement { get; init; } // true si es medición, false si es acción de control
+
+        /// <summary>
+        /// Gets the code associated with the variable.
+        /// </summary>
+        public string Code { get; init; } // Código de la variable
+
+        /// <summary>
+        /// Gets the sampling period for the variable.
+        /// </summary>
+        public TimeSpan SamplingPeriod { get; init; } // Intervalo de tiempo
+
+        /// <summary>
+        /// Gets the Modbus address for the variable.
+        /// </summary>
+        public int ModbusAddress { get; init; } // Dirección en el protocolo ModBus
+        public Guid UnitId { get; set; } // Relación uno-muchos (variable-unidad)
+
+        protected Variable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
+            : base(id)
         {
-            
             Name = name;
             Type = type;
             IsMeasurement = isMeasurement;
@@ -32,16 +51,7 @@ namespace ModbusData.Domain.Entities.Variables
             ModbusAddress = modbusAddress;
         }
 
-        // Requerido por EntityFramework
+        // Required by Entity Framework
         protected Variable() { }
     }
-
-
 }
-
-
-
-
-
-
-
