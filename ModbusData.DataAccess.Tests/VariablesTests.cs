@@ -13,7 +13,7 @@ using ModbusData.DataAccess;
 using ModbusData.Domain.Entities.Unit;
 using System.Collections.Generic;
 
-namespace ModbusData.Tests.DataAccess.Repositories.Variables
+namespace ModbusData.DataAccess.Tests
 {
     /// <summary>Clase de pruebas unitarias para VariableRepository.</summary>
     [TestClass]
