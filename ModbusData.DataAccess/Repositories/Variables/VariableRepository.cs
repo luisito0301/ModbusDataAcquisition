@@ -7,51 +7,17 @@ using ModbusData.Contract.Variables;
 
 namespace ModbusData.DataAccess.Repositories.Variables
 {
-    public class VariableRepository : RepositoryBase, IVariableRepository
+    public class VariableRepository<T> : RepositoryBase<T>, IVariableRepository<T> where T : Variable
     {
+        /// <summary>Constructor que inicializa el repositorio con el contexto de la aplicación.</summary>
+        /// <param name="context">El contexto de la aplicación.</param>
         public VariableRepository(ApplicationContext context) : base(context)
         {
         }
 
-        public void AddVariable(Variable variable)
-        {
-            // Check if the variable is already being tracked
-            var existingVariable = _context.Variables.Local.FirstOrDefault(v => v.Id == variable.Id);
-            if (existingVariable == null)
-            {
-                _context.Variables.Add(variable);
-            }
-        }
-
-        public void UpdateVariable(Variable variable)
-        {
-            // Check if the variable is already being tracked
-            var existingVariable = _context.Variables.Local.FirstOrDefault(v => v.Id == variable.Id);
-            if (existingVariable != null)
-            {
-                // Update the existing tracked entity
-                _context.Entry(existingVariable).CurrentValues.SetValues(variable);
-            }
-            else
-            {
-                _context.Variables.Update(variable);
-            }
-        }
-
-        public void DeleteVariable(Variable variable)
-        {
-            _context.Variables.Remove(variable);
-        }
-
-        public IEnumerable<T> GetAllVariables<T>() where T : Variable
-        {
-            return _context.Set<T>().ToList();
-        }
-                 public T? GetVariableById<T>(Guid id) where T : Variable
-        {
-            return _context.Set<T>().FirstOrDefault(x => x.Id == id);
-        }
+    }
+    
 
        
-    }
+    
 }

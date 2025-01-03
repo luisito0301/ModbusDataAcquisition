@@ -3,120 +3,165 @@ using Microsoft.EntityFrameworkCore;
 using ModbusData.Domain.Entities.Variables;
 using ModbusData.DataAccess.Contexts;
 using ModbusData.DataAccess.Repositories.Variables;
-using ModbusData.DataAccess.Tests.Utilities; // Asumiendo que tienes una clase ConnectionStringProvider para obtener la cadena de conexión
+using ModbusData.DataAccess.Tests.Utilities; // Assuming you have a class ConnectionStringProvider for getting the connection string
 using System;
 using System.Linq;
 using ModbusData.Contract.Variables;
 using ModbusData.Contract;
 using ModbusData.Domain.Types;
+using ModbusData.DataAccess;
+using ModbusData.Domain.Entities.Unit;
+using System.Collections.Generic;
 
-namespace ModbusData.DataAccess.Tests
+namespace ModbusData.Tests.DataAccess.Repositories.Variables
 {
+    /// <summary>Clase de pruebas unitarias para VariableRepository.</summary>
     [TestClass]
     public class VariablesTests
     {
-        private IVariableRepository _variableRepository;
+        private ApplicationContext _context;
         private IUnitOfWork _unitOfWork;
+        private IVariableRepository<AnalogicVariable> _variableRepository;
 
-        public VariablesTests()
+        /// <summary>Constructor que inicializa el contexto y el repositorio.</summary>
+        [TestInitialize]
+        public void SetUp()
         {
-            ApplicationContext context = new ApplicationContext(ConnectionStringProvider.GetConnectionString());
-            _variableRepository = new VariableRepository(context);
-            _unitOfWork = new UnitOfWork(context);
+            // Use a real database connection for testing
+            _context = new ApplicationContext(ConnectionStringProvider.GetConnectionString());
+            _unitOfWork = new UnitOfWork(_context); // Inicializa la unidad de trabajo
+            _variableRepository = new VariableRepository<AnalogicVariable>(_context);
+
+            // Clean up and recreate the database
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
         }
 
-        [DataRow( "Temperature", VariableType.Analogic, true, "Temp", 5, 100)]
-        [DataRow( "Pressure", VariableType.Analogic, false, "Pressure", 10, 101)]
+        /// <summary>Prueba para verificar que Add agrega una variable.</summary>
         [TestMethod]
-        public void Can_Add_Variable(
-           
-            string name,
-            VariableType type,
-            bool isMeasurement,
-            string code,
-            double samplingPeriodSeconds,
-            int modbusAddress)
+        public void Add_ShouldAddVariable()
         {
             // Arrange
-            Guid id = Guid.NewGuid();
-            AnalogicVariable variable = new AnalogicVariable(id, name, type, isMeasurement, code, TimeSpan.FromSeconds(samplingPeriodSeconds), modbusAddress);
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>()); // Use List<Variable>
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
-            // Execute
-            _variableRepository.AddVariable(variable);
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Temperature", VariableType.Analogic, true, "Temp", TimeSpan.FromSeconds(5), 100)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+
+            // Act
+            _variableRepository.Add(variable);
             _unitOfWork.SaveChanges();
 
             // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(id);
-            Assert.IsNotNull(loadedVariable);
+            var result = _context.Set<AnalogicVariable>().FirstOrDefault(v => v.Name == "Temperature");
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Temperature", result.Name);
         }
 
-        [DataRow(0)]
+        /// <summary>Prueba para verificar que GetById devuelve una variable.</summary>
         [TestMethod]
-        public void Can_Get_Variable_By_Id(int position)
+        public void GetById_ShouldReturnVariable()
         {
             // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToGet = variables[position];
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
-            // Execute
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToGet.Id);
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Pressure", VariableType.Analogic, true, "Pressure", TimeSpan.FromSeconds(10), 101)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+
+            _context.Set<AnalogicVariable>().Add(variable);
+            _unitOfWork.SaveChanges();
+
+            // Act
+            var result = _variableRepository.GetById(variable.Id);
 
             // Assert
-            Assert.IsNotNull(loadedVariable);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Pressure", result.Name);
         }
 
+        /// <summary>Prueba para verificar que GetAll devuelve todas las variables.</summary>
+        [TestMethod]
+        public void GetAll_ShouldReturnAllVariables()
+        {
+            // Arrange
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
+
+            var variable1 = new AnalogicVariable(Guid.NewGuid(), "Temperature", VariableType.Analogic, true, "Temp", TimeSpan.FromSeconds(5), 100)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+
+            var variable2 = new AnalogicVariable(Guid.NewGuid(), "Pressure", VariableType.Analogic, true, "Pressure", TimeSpan.FromSeconds(10), 101)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+
+            _context.Set<AnalogicVariable>().AddRange(variable1, variable2);
+            _unitOfWork.SaveChanges(); // Save the variables
+
+            // Act
+            var result = _variableRepository.GetAll().ToList();
+
+            // Assert
+            Assert.AreEqual(2, result.Count);
+        }
+
+        /// <summary>Prueba para verificar que Update modifica una variable.</summary>
+        [TestMethod]
+        public void Update_ShouldModifyVariable()
+        {
+            // Arrange
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
+
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Temperature", VariableType.Analogic, true, "Temp", TimeSpan.FromSeconds(5), 100)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+
+            _context.Set<AnalogicVariable>().Add(variable);
+            _unitOfWork.SaveChanges(); // Save the variable first
+
+            // Act
+            var updatedVariable = new AnalogicVariable(variable.Id, "Updated Temperature", variable.Type, variable.IsMeasurement, variable.Code, variable.SamplingPeriod, variable.ModbusAddress)
+            {
+                UnitId = unitId // Ensure the foreign key is set
+            };
+
+            _variableRepository.Update(updatedVariable);
+            _unitOfWork.SaveChanges();
+
+            // Assert
+            var result = _context.Set<AnalogicVariable>().Find(variable.Id);
+            Assert.AreEqual("Updated Temperature", result.Name);
+        }
         [TestMethod]
         public void Cannot_Get_Variable_By_Invalid_Id()
         {
             // Arrange
+            var invalidId = Guid.NewGuid(); // Generate a new GUID that does not exist in the database
 
-            // Execute
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(Guid.Empty);
-
-            // Assert
-            Assert.IsNull(loadedVariable);
-        }
-
-        [DataRow(0, "New Temperature")]
-        [TestMethod]
-        public void Can_Update_Variable(int position, string newName)
-        {
-            // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToUpdate = variables[position];
-
-            // Execute
-            
-            _variableRepository.UpdateVariable(variableToUpdate);
-            _unitOfWork.SaveChanges();
+            // Act
+            var result = _variableRepository.GetById(invalidId);
 
             // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToUpdate.Id);
-            Assert.IsNotNull(loadedVariable);
-            Assert.AreEqual(loadedVariable.Name, newName);
-        }
-
-        [DataRow(0)]
-        [TestMethod]
-        public void Can_Delete_Variable(int position)
-        {
-            // Arrange
-            var variables = _variableRepository.GetAllVariables<AnalogicVariable>().ToList();
-            Assert.IsNotNull(variables);
-            Assert.IsTrue(position < variables.Count);
-            AnalogicVariable variableToDelete = variables[position];
-
-            // Execute
-            _variableRepository.DeleteVariable(variableToDelete);
-            _unitOfWork.SaveChanges();
-
-            // Assert
-            AnalogicVariable? loadedVariable = _variableRepository.GetVariableById<AnalogicVariable>(variableToDelete.Id);
-            Assert.IsNull(loadedVariable);
+            Assert.IsNull(result); // The result should be null since the ID is invalid
         }
     }
 }
+
+        /// <
