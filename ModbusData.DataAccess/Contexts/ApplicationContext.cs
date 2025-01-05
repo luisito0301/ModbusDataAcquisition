@@ -8,7 +8,6 @@ using ModbusData.DataAccess.FluentConfigurations.Devices;
 using ModbusData.DataAccess.FluentConfigurations.ModbusNetworks;
 using ModbusData.DataAccess.FluentConfigurations.Units;
 using ModbusData.DataAccess.FluentConfigurations.Variables;
-
 namespace ModbusData.DataAccess.Contexts
 {
     public class ApplicationContext : DbContext

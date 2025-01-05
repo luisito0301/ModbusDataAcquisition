@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "common.proto"; 
+
+// Service definition for managing DigitalVariables
+service DigitalVariableService {
+    rpc CreateDigitalVariable(CreateDigitalVariableRequest) returns (DigitalVariableDTO);
+    rpc GetDigitalVariable(GetRequest) returns (NullableDigitalVariableDTO);
+    rpc GetAllDigitalVariables(google.protobuf.Empty) returns (DigitalVariables);
+    rpc UpdateDigitalVariable(DigitalVariableDTO) returns (google.protobuf.Empty);
+    rpc DeleteDigitalVariable(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+// DTO for DigitalVariable
+message DigitalVariableDTO {
+    string id = 1; // Unique identifier
+    string name = 2; // Name of the variable
+    VariableType type = 3; // Type of the variable (Digital or Analogic)
+    bool isMeasurement = 4; // Is it a measurement?
+    string code = 5; // Code associated with the variable
+    TimeSpan samplingPeriod = 6; // Sampling period as a structured TimeSpan
+    int32 modbusAddress = 7; // Modbus address
+    int32 value = 8; // Value of the digital variable
+}
+
+// Message for a collection of DigitalVariables
+message DigitalVariables {
+    repeated DigitalVariableDTO items = 1; // List of DigitalVariableDTOs
+}
+
+// Nullable DTO for DigitalVariable
+message NullableDigitalVariableDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Represents a null value
+        DigitalVariableDTO digitalVariable = 2; // The actual DigitalVariableDTO
+    }
+}
+
+// Request message for creating a DigitalVariable
+message CreateDigitalVariableRequest {
+    string name = 1; // Name of the variable
+    VariableType type = 2; // Type of the variable
+    bool isMeasurement = 3; // Is it a measurement?
+    string code = 4; // Code associated with the variable
+    TimeSpan samplingPeriod = 5; // Sampling period as a structured TimeSpan
+    int32 modbusAddress = 6; // Modbus address
+    int32 value = 7; // Value of the digital variable
+}

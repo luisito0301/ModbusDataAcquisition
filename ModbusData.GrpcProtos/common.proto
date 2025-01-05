@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+message GetRequest
+{
+	string id = 1;
+}
+
+message DeleteRequest
+{
+	string id = 1;
+}
+message IP
+{
+int octeto1=1;
+int octeto2=2;
+int octeto3=3;
+int octeto4=4;
+}
+
+enum VariableType{
+    Analogic=0;
+	Digital=1;
+}
