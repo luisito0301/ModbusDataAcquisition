@@ -11,7 +11,7 @@ namespace ModbusData.Services.Mappers
             CreateMap<ModbusData.Domain.Entities.Variables.AnalogicVariable, AnalogicVariableDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => (VariableType)src.Type)) // Assuming VariableType is an enum
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => (Domain.Types.VariableType)src.Type)) // Assuming VariableType is an enum
                 .ForMember(dest => dest.IsMeasurement, opt => opt.MapFrom(src => src.IsMeasurement))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.SamplingPeriod, opt => opt.MapFrom(src => src.SamplingPeriod.ToString())) // Convert TimeSpan to string

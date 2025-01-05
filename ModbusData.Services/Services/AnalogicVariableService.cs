@@ -15,7 +15,7 @@ using System.Reflection.Metadata.Ecma335;
 using ModbusData.Variables.Commands.DeleteAnalogicVariable;
 using ModbusData.Domain.Types;
 
-namespace ModbusData.Services
+namespace ModbusData.Services.Services
 {
     public class AnalogicVariableService : AnalogicVariable.AnalogicVariableBase
     {
@@ -37,7 +37,7 @@ namespace ModbusData.Services
         {
             var command = new CreateAnalogicVariableCommand(
                 request.Name,
-                (VariableType)request.Type,
+                (Domain.Types.VariableType)request.Type,
                 request.IsMeasurement,
                 request.Code,
                 TimeSpan.FromMilliseconds(request.SamplingPeriod),
@@ -51,7 +51,7 @@ namespace ModbusData.Services
             return Task.FromResult(_mapper.Map<AnalogicVariableDTO>(result));
         }
 
-        public override Task<NullableAnalogicVariableDTO> GetAnalogicVariable(GetAnalogicVariableByIdRequest request, ServerCallContext context)
+        public override Task<NullableAnalogicVariableDTO> GetAnalogicVariable(GetAnalogicVariableRequest request, ServerCallContext context)
         {
             var query = new GetAnalogicVariableByIdQuery(Guid.Parse(request.Id));
 

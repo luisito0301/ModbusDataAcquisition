@@ -19,6 +19,7 @@ using ModbusData.Contract.Units;
 using ModbusData.DataAccess;
 using ModbusData.Domain.Types;
 
+
 namespace ModbusData.ConsoleApp
 {
     internal class Program

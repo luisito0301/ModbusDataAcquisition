@@ -6,9 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-	<ItemGroup>
-		<Protobuf Include="*.proto" GrpcServices=" Both" />
-	</ItemGroup>
   <ItemGroup>
     <None Remove="analogicvariable.proto" />
     <None Remove="common.proto" />
@@ -26,5 +23,7 @@
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
     <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<Protobuf Include="*.proto" GrpcServices=" Both" />
+	</ItemGroup>
 </Project>

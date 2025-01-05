@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.DataAccess\ModbusData.DataAccess.csproj" />
+    <ProjectReference Include="..\ModbusData.GrpcProtos\ModbusData.GrpcProtos.csproj" />
   </ItemGroup>
 
 </Project>
