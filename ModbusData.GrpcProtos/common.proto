@@ -15,10 +15,10 @@ message DeleteRequest
 }
 message IP
 {
-int octeto1=1;
-int octeto2=2;
-int octeto3=3;
-int octeto4=4;
+int32 octeto1=1;
+int32 octeto2=2;
+int32 octeto3=3;
+int32 octeto4=4;
 }
 
 enum VariableType{

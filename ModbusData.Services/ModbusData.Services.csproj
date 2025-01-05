@@ -19,8 +19,4 @@
     <ProjectReference Include="..\ModbusData.GrpcProtos\ModbusData.GrpcProtos.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
-
 </Project>

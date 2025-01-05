@@ -12,7 +12,6 @@
   <ItemGroup>
     <None Remove="analogicvariable.proto" />
     <None Remove="common.proto" />
-    <None Remove="digitalvariable.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +19,12 @@
     <PackageReference Include="Google.Protobuf" Version="3.29.2" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModbusData.DataAccess\ModbusData.DataAccess.csproj" />
+    <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+    <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
   </ItemGroup>
 
 </Project>

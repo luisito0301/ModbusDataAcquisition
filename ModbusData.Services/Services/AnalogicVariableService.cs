@@ -3,17 +3,17 @@ using Grpc.Core;
 using ModbusData.Services;
 using ModbusData.Contract;
 using ModbusData.Application.Variables.Commands.CreateAnalogicVariable;
-using ModbusData.Application.Variables.Commands.DeleteAnalogicVariable;
 using ModbusData.Application.Variables.Commands.UpdateAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAllAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
 using ModbusData.Domain.Entities.Variables; // Adjust the namespace as necessary
-using ModbusData.GrpcProtos; // Adjust the namespace as necessary
+using ModbusData.GrpcProtos;
 using MediatR;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Reflection.Metadata.Ecma335;
 using ModbusData.Variables.Commands.DeleteAnalogicVariable;
+using ModbusData.Domain.Types;
 
 namespace ModbusData.Services
 {
@@ -70,7 +70,7 @@ namespace ModbusData.Services
             return Task.FromResult(_mapper.Map<NullableAnalogicVariableDTO>(result));
         }
 
-        public override Task<AnalogicVariables> GetAllAnalogicVariables(Empty request, ServerCallContext context)
+        public override Task<AnalogicVariable> GetAllAnalogicVariables(Empty request, ServerCallContext context)
         {
             var query = new GetAllAnalogicVariableQuery();
 
