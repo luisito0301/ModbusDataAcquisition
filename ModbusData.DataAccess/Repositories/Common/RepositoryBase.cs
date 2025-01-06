@@ -11,7 +11,7 @@ namespace ModbusData.DataAccess.Repositories.Common
 {
     /// <summary>Interfaz genérica para un repositorio base que define las operaciones básicas de acceso a datos para cualquier tipo de entidad.</summary>
     /// <typeparam name="T">El tipo de entidad que el repositorio manejará.</typeparam>
-    public interface IVariableRepository<T> where T : Entity
+    public interface IRepositoryBase<T> where T : Entity
     {
         /// <summary>Añade una nueva entidad al repositorio.</summary>
         /// <param name="entity">La entidad a añadir.</param>
@@ -37,7 +37,7 @@ namespace ModbusData.DataAccess.Repositories.Common
 
 
     /// <summary>Utiliza genéricos para permitir que cualquier tipo de entidad (que sea una clase) pueda ser manejada por el repositorio.</summary>
-    public abstract class RepositoryBase<T> : IVariableRepository<T> where T : Entity
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : Entity
     {
         protected readonly ApplicationContext _context;
 

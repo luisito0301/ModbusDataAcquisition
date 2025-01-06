@@ -7,13 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using ModbusData.DataAccess.Repositories.Common;
 using ModbusData.Contract;
+using ModbusData.Contract.Variables;
 
 namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
 {
    
 
    
-        public class CreateAnalogicVariableCommandHandler : ICommandHandler<CreateAnalogicVariableCommand, AnalogicVariable>
+        public class CreateAnalogicVariableCommandHandler : ICommandHandler<CreateAnalogicVariableCommand?, AnalogicVariable>
         {
             private readonly IVariableRepository<AnalogicVariable> _analogicvariablerepository;
             private readonly IUnitOfWork _unitOfWork;
