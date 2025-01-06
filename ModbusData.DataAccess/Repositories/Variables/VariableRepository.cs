@@ -7,7 +7,7 @@ using ModbusData.Contract.Variables;
 
 namespace ModbusData.DataAccess.Repositories.Variables
 {
-    public class VariableRepository<T> : RepositoryBase<T>, IVariableRepository<T> where T : Variable
+    public class VariableRepository<T> : RepositoryBase<T>, Contract.Variables.IVariableRepository<T> where T : Variable
     {
         /// <summary>Constructor que inicializa el repositorio con el contexto de la aplicación.</summary>
         /// <param name="context">El contexto de la aplicación.</param>

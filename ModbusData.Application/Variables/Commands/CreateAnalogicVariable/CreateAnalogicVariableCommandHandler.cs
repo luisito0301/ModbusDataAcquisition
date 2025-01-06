@@ -15,11 +15,11 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
    
         public class CreateAnalogicVariableCommandHandler : ICommandHandler<CreateAnalogicVariableCommand, AnalogicVariable>
         {
-            private readonly IRepositoryBase<AnalogicVariable> _analogicvariablerepository;
+            private readonly IVariableRepository<AnalogicVariable> _analogicvariablerepository;
             private readonly IUnitOfWork _unitOfWork;
 
             public CreateAnalogicVariableCommandHandler(
-                IRepositoryBase<AnalogicVariable> analogicvariablerepository,
+                IVariableRepository<AnalogicVariable> analogicvariablerepository,
                 IUnitOfWork unitOfWork)
             {
                 _analogicvariablerepository = analogicvariablerepository;
@@ -29,7 +29,7 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
             public Task<AnalogicVariable> Handle(CreateAnalogicVariableCommand request, CancellationToken cancellationToken)
             {
                 // Create a new instance of AnalogicVariable
-                var result = new AnalogicVariable(
+                AnalogicVariable result = new AnalogicVariable(
                     Guid.NewGuid(), // Generate a new ID
                     request.Name,
                     request.Type,
