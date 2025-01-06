@@ -10,7 +10,7 @@ import "google/protobuf/struct.proto";
 import "common.proto"; 
 
 // Service definition for managing AnalogicVariables
-service AnalogicVariableService {
+service AnalogicVariable {
     rpc CreateAnalogicVariable(CreateAnalogicVariableRequest) returns (AnalogicVariableDTO);
     rpc GetAnalogicVariable(GetRequest) returns (NullableAnalogicVariableDTO);
     rpc GetAllAnalogicVariables(google.protobuf.Empty) returns (AnalogicVariables);
@@ -28,6 +28,7 @@ message AnalogicVariableDTO {
     string samplingPeriod = 6; // Sampling period as a string
     int32 modbusAddress = 7; // Modbus address
     double value = 8; // Value of the analog variable
+    string unitid=9;
 }
 
 // Message for a collection of AnalogicVariables
@@ -52,5 +53,6 @@ message CreateAnalogicVariableRequest {
     string samplingPeriod = 5; // Sampling period as a string
     int32 modbusAddress = 6; // Modbus address
     double value = 7; // Value of the analog variable
+    string unitid=8;
 }
 

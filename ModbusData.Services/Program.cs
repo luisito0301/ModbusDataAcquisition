@@ -5,6 +5,8 @@ using ModbusData.DataAccess.Contexts;
 using ModbusData.DataAccess.Repositories.Variables;
 using System.Reflection.Metadata;
 using ModbusData.GrpcProtos;
+using ModbusData.Services.Services;
+
 namespace ModbusData.Services
 {
     public class Program
