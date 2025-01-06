@@ -45,14 +45,14 @@ namespace ModbusData.Services.Services
                 Guid.Parse(request.Unitid)
             );
 
-            var result = _mediator.Send(command); // Synchronous call
+            var result = _mediator.Send(command).Result; // Synchronous call
             return Task.FromResult(_mapper.Map<AnalogicVariableDTO>(result));
         }
 
         public override Task <NullableAnalogicVariableDTO> GetAnalogicVariable(GetRequest request, ServerCallContext context)
         {
             var query = new GetAnalogicVariableByIdQuery(Guid.Parse(request.Id));
-            var result = _mediator.Send(query); // Synchronous call
+            var result = _mediator.Send(query).Result; // Synchronous call
 
             if (result is null)
             {
