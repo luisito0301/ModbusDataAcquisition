@@ -6,11 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="analogicvariable.proto" />
-    <None Remove="common.proto" />
-    <None Remove="unit.proto" />
-  </ItemGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />

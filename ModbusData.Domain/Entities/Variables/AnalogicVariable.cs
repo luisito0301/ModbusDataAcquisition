@@ -30,5 +30,6 @@ namespace ModbusData.Domain.Entities.Variables
 
         // Required by Entity Framework
         protected AnalogicVariable() { }
+
     }
 }
