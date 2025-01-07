@@ -52,7 +52,7 @@ namespace ModbusData.DataAccess.Repositories.Common
         {
             if (entity == null)
             {
-                throw new ArgumentNullException(nameof(entity), "La Sensor o actuador no puede ser nulo.");
+                throw new ArgumentNullException(nameof(entity), "La variable no puede ser nulo.");
             }
             _context.Set<T>().Add(entity);
             _context.SaveChanges();

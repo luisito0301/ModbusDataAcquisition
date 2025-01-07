@@ -1,6 +1,9 @@
 ﻿using ModbusData.GrpcProtos; // Ensure you have the correct namespace for your gRPC Protos
 using Grpc.Net.Client;
 using System;
+using System.Diagnostics.Metrics;
+using ModbusData.DataAccess.Contexts;
+using ModbusData.Domain.Entities.Unit;
 
 namespace ModbusData.ConsoleApp
 {
@@ -8,6 +11,7 @@ namespace ModbusData.ConsoleApp
     {
         static void Main(string[] args)
         {
+            
             Console.WriteLine("Presione una tecla para conectar");
             Console.ReadKey();
 
@@ -32,6 +36,8 @@ namespace ModbusData.ConsoleApp
 
             Console.WriteLine("Presione una tecla para crear una variable analógica");
             Console.ReadKey();
+
+         
             var createResponse = client.CreateAnalogicVariable(new CreateAnalogicVariableRequest()
             {
                 Name = "Test Variable",
@@ -43,7 +49,7 @@ namespace ModbusData.ConsoleApp
                 Value = 10.0,
                 Unitid = Guid.NewGuid().ToString()
             });
-
+          
             if (createResponse is null)
             {
                 Console.WriteLine("Cannot create analogic variable");

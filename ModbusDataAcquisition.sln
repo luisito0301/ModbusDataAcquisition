@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusData.Services", "Modb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusData.GrpcProtos", "ModbusData.GrpcProtos\ModbusData.GrpcProtos.csproj", "{7449925E-929F-4D7A-9203-5B40252B2F09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusData.Application", "ModbusData.Application\ModbusData.Application.csproj", "{81CA8202-764F-4B9A-9A42-F6AF652477E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModbusData.Application", "ModbusData.Application\ModbusData.Application.csproj", "{81CA8202-764F-4B9A-9A42-F6AF652477E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

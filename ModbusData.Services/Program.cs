@@ -1,8 +1,10 @@
 using ModbusData.Application;
 using ModbusData.Contract;
+using ModbusData.Contract.Units;
 using ModbusData.Contract.Variables;
 using ModbusData.DataAccess;
 using ModbusData.DataAccess.Contexts;
+using ModbusData.DataAccess.Repositories.Units;
 using ModbusData.DataAccess.Repositories.Variables;
 
 using ModbusData.GrpcProtos;
@@ -21,7 +23,7 @@ namespace ModbusData.Services
             builder.Services.AddScoped<ApplicationContext>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IVariableRepository<>), typeof(VariableRepository<>));
-
+            builder.Services.AddScoped(typeof(IUnitRepository<>), typeof(UnitRepository<>));
             builder.Services.AddGrpc();
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddMediatR(new MediatRServiceConfiguration()
