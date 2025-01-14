@@ -15,7 +15,7 @@ namespace ModbusData.Domain.Entities.Unit
         public string ManufactererName { get; set; } ///Nombre del fabricante
         public string Code { get; set; }  ///Codigo asociado a la unidad
         public string AreaName { get; set; } ///Nombre del area donde se encuentran
-       public List<Variable> _variables { get; set; } = new List<Variable>(); ///Variables asociadas a la unidad
+        private List<Variable> _variables = new List<Variable>(); ///Variables asociadas a la unidad
         public IReadOnlyCollection<Variable> Variables
         { 
             get { return _variables; }

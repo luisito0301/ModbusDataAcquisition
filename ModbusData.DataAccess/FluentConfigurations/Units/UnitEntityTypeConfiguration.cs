@@ -18,6 +18,9 @@ namespace ModbusData.DataAccess.FluentConfigurations.Units
         {
             builder.ToTable("Units"); // Use plural for consistency
             base.Configure(builder);
+            builder.HasMany(x => x.Variables)
+                .WithOne()
+                .HasForeignKey(x => x.UnitId);
 
             // Configure the relationship with Variables
            
