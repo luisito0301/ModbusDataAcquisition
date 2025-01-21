@@ -23,4 +23,8 @@
 	<ItemGroup>
 		<Protobuf Include="*.proto" GrpcServices=" Both" />
 	</ItemGroup>
+	
+
+
+	
 </Project>

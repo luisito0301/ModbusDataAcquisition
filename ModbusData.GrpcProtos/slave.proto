@@ -1,0 +1,47 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "variable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
+import "common.proto";
+import "unit.proto";
+// Definición del servicio para gestionar SlaveDevices
+service SlaveDeviceService {
+    rpc CreateSlaveDevice(CreateSlaveDeviceRequest) returns (SlaveDeviceDTO);
+    rpc GetSlaveDevice(GetRequest) returns (NullableSlaveDeviceDTO);
+    rpc GetAllSlaveDevices(google.protobuf.Empty) returns (SlaveDevices);
+    rpc UpdateSlaveDevice(SlaveDeviceDTO) returns (google.protobuf.Empty);
+    rpc DeleteSlaveDevice(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+// DTO para SlaveDevice
+message SlaveDeviceDTO {
+    string id = 1; // Identificador único del dispositivo
+    IP ipAddress = 2; // Dirección IP del dispositivo
+    repeated Variable variables = 3; // Lista de variables asociadas al dispositivo
+}
+
+
+// Mensaje para una colección de SlaveDevices
+message SlaveDevices {
+    repeated SlaveDeviceDTO items = 1; // Lista de SlaveDeviceDTOs
+}
+
+// Nullable DTO para SlaveDevice
+message NullableSlaveDeviceDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Representa un valor nulo
+        SlaveDeviceDTO slaveDevice = 2; // El DTO del dispositivo
+    }
+}
+
+// Mensaje de solicitud para crear un SlaveDevice
+message CreateSlaveDeviceRequest {
+      IP ipAddress = 1; // Dirección IP del dispositivo
+    repeated Variable variables = 2; // Variables asociadas al dispositivo
+}

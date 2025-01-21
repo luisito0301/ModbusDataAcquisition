@@ -1,0 +1,136 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto"; // Importar timestamp para DateTime
+import "google/protobuf/empty.proto";
+import "common.proto";
+
+// Base DTO for Variable
+message VariableDTO {
+    string id = 1; // Unique identifier
+    string name = 2; // Name of the variable
+    VariableType type = 3; // Type of the variable (Digital or Analogic)
+    bool isMeasurement = 4; // Is it a measurement?
+    string code = 5; // Code associated with the variable
+    string samplingPeriod = 6; // Sampling period as a string
+    int32 modbusAddress = 7; // Modbus address
+    string unitid = 8; // Unit ID
+    repeated SampleDTO samples = 9; // Collection of samples associated with the variable
+}
+
+// DTO for AnalogicVariable
+message AnalogicVariableDTO {
+    VariableDTO base = 1; // Inherit base properties
+    double value = 2; // Value of the analog variable
+}
+
+// DTO for DigitalVariable
+message DigitalVariableDTO {
+    VariableDTO base = 1; // Inherit base properties
+    double value = 2; // Value of the digital variable
+}
+
+// DTO for Sample
+message SampleDTO {
+    string variableId = 1; // ID of the associated variable
+    google.protobuf.Timestamp date = 2; // Date of the sample
+}
+
+// Message for a collection of AnalogicVariables
+message AnalogicVariables {
+    repeated AnalogicVariableDTO items = 1; // List of AnalogicVariableDTOs
+}
+
+// Message for a collection of DigitalVariables
+message DigitalVariables {
+    repeated DigitalVariableDTO items = 1; // List of DigitalVariableDTOs
+}
+
+// Nullable DTO for AnalogicVariable
+message NullableAnalogicVariableDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Represents a null value
+        AnalogicVariableDTO analogicVariable = 2; // The actual AnalogicVariableDTO
+    }
+}
+
+// Nullable DTO for DigitalVariable
+message NullableDigitalVariableDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Represents a null value
+        DigitalVariableDTO digitalVariable = 2; // The actual DigitalVariableDTO
+    }
+}
+
+// Service definition for managing AnalogicVariables
+service AnalogicVariable {
+    rpc CreateAnalogicVariable(CreateAnalogicVariableRequest) returns (AnalogicVariableDTO);
+    rpc GetAnalogicVariable(GetRequest) returns (NullableAnalogicVariableDTO);
+    rpc GetAllAnalogicVariables(google.protobuf.Empty) returns (AnalogicVariables);
+    rpc UpdateAnalogicVariable(AnalogicVariableDTO) returns (google.protobuf.Empty);
+    rpc DeleteAnalogicVariable(DeleteRequest) returns (google.protobuf.Empty);
+
+    // New methods for managing samples
+    rpc AddSample(AddSampleRequest) returns (google.protobuf.Empty);
+    rpc GetSamplesByDate(GetSamplesByDateRequest) returns (Samples);
+}
+
+// Service definition for managing DigitalVariables
+service DigitalVariable {
+    rpc CreateDigitalVariable(CreateDigitalVariableRequest) returns (DigitalVariableDTO);
+    rpc GetDigitalVariable(GetRequest) returns (NullableDigitalVariableDTO);
+    rpc GetAllDigitalVariables(google.protobuf.Empty) returns (DigitalVariables);
+    rpc UpdateDigitalVariable(DigitalVariableDTO) returns (google.protobuf.Empty);
+    rpc DeleteDigitalVariable(DeleteRequest) returns (google.protobuf.Empty);
+
+    // New methods for managing samples
+    rpc AddSample(AddSampleRequest) returns (google.protobuf.Empty);
+    rpc GetSamplesByDate(GetSamplesByDateRequest) returns (Samples);
+}
+
+// Request message for creating an AnalogicVariable
+message CreateAnalogicVariableRequest {
+    string name = 1; // Name of the variable
+    VariableType type = 2; // Type of the variable
+    bool isMeasurement = 3; // Is it a measurement?
+    string code = 4; // Code associated with the variable
+    string samplingPeriod = 5; // Sampling period as a string
+    int32 modbusAddress = 6; // Modbus address
+    double value = 7; // Value of the analog variable
+    string unitid = 8; // Unit ID
+}
+
+// Request message for creating a DigitalVariable
+message CreateDigitalVariableRequest {
+    string name = 1; // Name of the variable
+    VariableType type = 2; // Type of the variable
+    bool isMeasurement = 3; // Is it a measurement?
+    string code = 4; // Code associated with the variable
+    string samplingPeriod = 5; // Sampling period as a string
+    int32 modbusAddress = 6; // Modbus address
+    double value = 7; // Value of the digital variable
+    string unitid = 8; // Unit ID
+}
+
+// Request message for adding a sample
+message AddSampleRequest {
+    string variableId = 1; // ID of the associated variable
+    google.protobuf.Timestamp date = 2; // Date of the sample
+}
+
+// Request message for getting samples by date
+message GetSamplesByDateRequest {
+    string variableId = 1; // ID of the associated variable
+    google.protobuf.Timestamp startDate = 2; // Start date for the range
+    google.protobuf.Timestamp endDate = 3; // End date for the range
+}
+
+// Response message for returning samples
+message Samples {
+    repeated SampleDTO items = 1; // List of SampleDTOs
+}

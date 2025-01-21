@@ -7,9 +7,8 @@ package GrpcProtos;
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
-import "common.proto"; 
-import "analogicvariable.proto"; // Asegúrate de que este archivo existe y contiene la definición de AnalogicVariable
-
+import "variable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
+import "common.proto";
 // Definición del servicio para gestionar Unidades
 service Unit {
     rpc CreateUnit(CreateUnitRequest) returns (UnitDTO);
@@ -21,11 +20,19 @@ service Unit {
 
 // DTO para Unit
 message UnitDTO {
-    string id = 1;                  // Identificador único de la unidad
-    string manufacterer_name = 2;    // Nombre del fabricante
-    string code = 3;                 // Código asociado a la unidad
-    string area_name = 4;            // Nombre del área donde se encuentran
-    repeated AnalogicVariableDTO variables = 5;  // Variables asociadas a la unidad
+    string id = 1; // Identificador único de la unidad
+    string manufacterer_name = 2; // Nombre del fabricante
+    string code = 3; // Código asociado a la unidad
+    string area_name = 4; // Nombre del área donde se encuentra la unidad
+    repeated Variable variables = 5; // Lista de variables asociadas a la unidad
+}
+
+// Message for Variable (oneof)
+message Variable {
+    oneof variable {
+        AnalogicVariableDTO analogicVariable = 1;
+        DigitalVariableDTO digitalVariable = 2;
+    }
 }
 
 // Mensaje para una colección de Unidades
@@ -44,7 +51,7 @@ message NullableUnitDTO {
 // Mensaje de solicitud para crear una Unidad
 message CreateUnitRequest {
     string manufacterer_name = 1; // Nombre del fabricante
-    string code = 2;               // Código asociado a la unidad
-    string area_name = 3;          // Nombre del área donde se encuentran
-    repeated AnalogicVariableDTO variables = 4; // Variables asociadas a la unidad
+    string code = 2; // Código asociado a la unidad
+    string area_name = 3; // Nombre del área donde se encuentran
+    repeated Variable variables = 4; // Variables asociadas a la unidad
 }

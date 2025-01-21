@@ -1,0 +1,47 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "variable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
+import "common.proto";
+import "unit.proto";
+import "slave.proto"; // Asegúrate de que este archivo existe y contiene la definición de SlaveDeviceDTO
+
+// Definición del servicio para gestionar ModbusNetwork
+service ModbusNetworkService {
+    rpc CreateModbusNetwork(CreateModbusNetworkRequest) returns (ModbusNetworkDTO);
+    rpc GetModbusNetwork(GetRequest) returns (NullableModbusNetworkDTO);
+    rpc GetAllModbusNetworks(google.protobuf.Empty) returns (ModbusNetworks);
+    rpc UpdateModbusNetwork(ModbusNetworkDTO) returns (google.protobuf.Empty);
+    rpc DeleteModbusNetwork(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+// DTO para ModbusNetwork
+message ModbusNetworkDTO {
+    string id = 1; // Identificador único de la red
+    IP masterIpAddress = 2; // Dirección IP del dispositivo maestro
+    repeated SlaveDeviceDTO slaves = 3; // Lista de dispositivos esclavos asociados a la red
+}
+
+// Mensaje para una colección de ModbusNetworks
+message ModbusNetworks {
+    repeated ModbusNetworkDTO items = 1; // Lista de ModbusNetworkDTOs
+}
+
+// Nullable DTO para ModbusNetwork
+message NullableModbusNetworkDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Representa un valor nulo
+        ModbusNetworkDTO modbusNetwork = 2; // El DTO de la red
+    }
+}
+
+// Mensaje de solicitud para crear una ModbusNetwork
+message CreateModbusNetworkRequest {
+    string masterIpAddress = 1; // Dirección IP del dispositivo maestro
+    repeated SlaveDeviceDTO slaves = 2; // Dispositivos esclavos asociados a la red
+}
