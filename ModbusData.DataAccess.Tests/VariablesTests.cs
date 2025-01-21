@@ -12,6 +12,7 @@ using ModbusData.Domain.Types;
 using ModbusData.DataAccess;
 using ModbusData.Domain.Entities.Unit;
 using System.Collections.Generic;
+using ModbusData.Domain.Records;
 
 namespace ModbusData.DataAccess.Tests
 {
@@ -149,6 +150,7 @@ namespace ModbusData.DataAccess.Tests
             var result = _context.Set<AnalogicVariable>().Find(variable.Id);
             Assert.AreEqual("Updated Temperature", result.Name);
         }
+
         [TestMethod]
         public void Cannot_Get_Variable_By_Invalid_Id()
         {
@@ -161,7 +163,77 @@ namespace ModbusData.DataAccess.Tests
             // Assert
             Assert.IsNull(result); // The result should be null since the ID is invalid
         }
+
+        /// <summary>Prueba para verificar que AddSample agrega una muestra a una variable.</summary>
+        [TestMethod]
+        public void AddSample_ShouldAddSampleToVariable()
+        {
+            // Arrange
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
+
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Humidity", VariableType.Analogic, true, "Humidity", TimeSpan.FromSeconds(15), 102)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+            _context.Set<AnalogicVariable>().Add(variable);
+            _unitOfWork.SaveChanges(); // Save the variable first to ensure it exists
+
+            var sample = new Sample
+            {
+                Date = DateTime.Now
+            };
+
+            // Act
+            _variableRepository.AddSample(variable.Id, sample);
+            _unitOfWork.SaveChanges();
+
+            // Assert
+            var result = _variableRepository.GetById(variable.Id);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Samples.Count);
+            Assert.AreEqual(sample.Date, result.Samples.First().Date);
+        }
+
+        /// <summary>Prueba para verificar que GetSamplesByDate devuelve las muestras en un rango de fechas.</summary>
+        [TestMethod]
+        public void GetSamplesByDate_ShouldReturnSamplesInDateRange()
+        {
+            // Arrange
+            var unitId = Guid.NewGuid();
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            _context.Set<Unit>().Add(unit);
+            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
+
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Humidity", VariableType.Analogic, true, "Humidity", TimeSpan.FromSeconds(15), 102)
+            {
+                UnitId = unitId // Set the foreign key to the existing unit
+            };
+            _context.Set<AnalogicVariable>().Add(variable);
+            _unitOfWork.SaveChanges(); // Save the variable first to ensure it exists
+
+            var sample1 = new Sample
+            {
+                Date = DateTime.Now.AddDays(-1)
+            };
+            var sample2 = new Sample
+            {
+                Date = DateTime.Now
+            };
+
+            _variableRepository.AddSample(variable.Id, sample1);
+            _variableRepository.AddSample(variable.Id, sample2);
+            _unitOfWork.SaveChanges();
+
+            // Act
+            var result = _variableRepository.GetSamplesByDate(variable.Id, DateTime.Now.AddDays(-2), DateTime.Now.AddDays(1)).ToList();
+            // Assert
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(s => s.Date == sample1.Date));
+            Assert.IsTrue(result.Any(s => s.Date == sample2.Date));
+        }
     }
 }
-
-        /// <
+//

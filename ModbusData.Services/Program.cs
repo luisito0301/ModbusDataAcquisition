@@ -19,7 +19,7 @@ namespace ModbusData.Services
             var builder = WebApplication.CreateBuilder(args);
             
             // Add services to the container.
-            builder.Services.AddSingleton("Data Source=ModbusDataDB.sqlite");
+            builder.Services.AddSingleton("Data Source=Data.sqlite");
             builder.Services.AddScoped<ApplicationContext>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped(typeof(IVariableRepository<>), typeof(VariableRepository<>));

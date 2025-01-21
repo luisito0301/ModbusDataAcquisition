@@ -125,6 +125,24 @@ namespace ModbusData.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sample",
+                columns: table => new
+                {
+                    VariableId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sample", x => new { x.VariableId, x.Date });
+                    table.ForeignKey(
+                        name: "FK_Sample_Variables_VariableId",
+                        column: x => x.VariableId,
+                        principalTable: "Variables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_SlaveDevices_ModbusNetworkId",
                 table: "SlaveDevices",
@@ -153,6 +171,9 @@ namespace ModbusData.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "DigitalVariables");
+
+            migrationBuilder.DropTable(
+                name: "Sample");
 
             migrationBuilder.DropTable(
                 name: "Variables");

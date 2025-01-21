@@ -1,4 +1,5 @@
 ﻿using ModbusData.Domain.Common;
+using ModbusData.Domain.Records;
 using ModbusData.Domain.Types;
 using System;
 
@@ -39,7 +40,7 @@ namespace ModbusData.Domain.Entities.Variables
         /// </summary>
         public int ModbusAddress { get; init; } // Dirección en el protocolo ModBus
         public Guid UnitId { get; set; } // Relación uno-muchos (variable-unidad)
-
+        public virtual ICollection<Sample> Samples { get; set; } = new List<Sample>();
         protected Variable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
             : base(id)
         {

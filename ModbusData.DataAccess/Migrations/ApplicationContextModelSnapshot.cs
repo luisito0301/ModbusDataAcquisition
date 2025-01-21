@@ -169,6 +169,24 @@ namespace ModbusData.DataAccess.Migrations
                     b.HasOne("ModbusData.Domain.Entities.Unit.Unit", null)
                         .WithMany("Variables")
                         .HasForeignKey("UnitId1");
+
+                    b.OwnsMany("ModbusData.Domain.Records.Sample", "Samples", b1 =>
+                        {
+                            b1.Property<Guid>("VariableId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("Date")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("VariableId", "Date");
+
+                            b1.ToTable("Sample");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VariableId");
+                        });
+
+                    b.Navigation("Samples");
                 });
 
             modelBuilder.Entity("ModbusData.Domain.Entities.Variables.AnalogicVariable", b =>

@@ -45,7 +45,10 @@ namespace ModbusData.DataAccess.Contexts
             modelBuilder.ApplyConfiguration(new AnalogicVariableEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DigitalVariableEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new VariableEntityTypeConfigurationBase());
+
+    
         }
+
 
         private static DbContextOptions GetOptions(string connectionString)
         {
