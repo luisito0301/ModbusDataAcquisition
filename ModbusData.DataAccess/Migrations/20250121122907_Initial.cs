@@ -28,7 +28,8 @@ namespace ModbusData.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ManufactererName = table.Column<string>(type: "TEXT", nullable: false),
                     Code = table.Column<string>(type: "TEXT", nullable: false),
-                    AreaName = table.Column<string>(type: "TEXT", nullable: false)
+                    AreaName = table.Column<string>(type: "TEXT", nullable: false),
+                    UnitTypes = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

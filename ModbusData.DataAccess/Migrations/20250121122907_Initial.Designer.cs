@@ -11,7 +11,7 @@ using ModbusData.DataAccess.Contexts;
 namespace ModbusData.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250121110855_Initial")]
+    [Migration("20250121122907_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,9 @@ namespace ModbusData.DataAccess.Migrations
                     b.Property<string>("ManufactererName")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("UnitTypes")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

@@ -44,7 +44,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>()); // Use List<Variable>
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Continuous); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
@@ -69,7 +69,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Batch); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
@@ -95,7 +95,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Discrete); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
@@ -125,7 +125,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Storage); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
@@ -170,7 +170,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Continuous); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
@@ -203,7 +203,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Batch); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 

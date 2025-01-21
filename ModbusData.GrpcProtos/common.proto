@@ -6,22 +6,30 @@ package GrpcProtos;
 
 message GetRequest
 {
-	string id = 1;
+    string id = 1;
 }
 
 message DeleteRequest
 {
-	string id = 1;
-}
-message IP
-{
-int32 octeto1=1;
-int32 octeto2=2;
-int32 octeto3=3;
-int32 octeto4=4;
+    string id = 1;
 }
 
-enum VariableType{
-    Analogic=0;
-	Digital=1;
+message IP
+{
+    int32 octeto1 = 1;
+    int32 octeto2 = 2;
+    int32 octeto3 = 3;
+    int32 octeto4 = 4;
+}
+
+enum VariableType {
+    Analogic = 0;
+    Digital = 1;
+}
+
+enum UnitType {
+    CONTINUOUS = 0;            
+    DISCRETE = 1;              
+    BATCH = 2;                 
+    STORAGE = 3;               
 }
