@@ -25,3 +25,10 @@ enum VariableType{
     Analogic=0;
 	Digital=1;
 }
+enum UnitType{
+
+Continuous=0;
+        Discrete=1;
+        Batch=2;
+        Storage=3;
+}

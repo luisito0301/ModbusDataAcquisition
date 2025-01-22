@@ -16,15 +16,16 @@ namespace ModbusData.Services.Mappers
                 .ForMember(dest => dest.ManufactererName, opt => opt.MapFrom(src => src.ManufactererName))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.AreaName, opt => opt.MapFrom(src => src.AreaName))
-                .ForMember(dest => dest.Variables, opt => opt.MapFrom(src => src.Variables)); // Assuming Variables is a collection of AnalogicVariableDTO
-
+                .ForMember(dest => dest.Variables, opt => opt.MapFrom(src => src.Variables)) // Assuming Variables is a collection of AnalogicVariableDTO
+                .ForMember(dest => dest.Types_, opt => opt.MapFrom(src => src.UnitTypes));
             // Mapping from gRPC DTO to Domain Entity
             CreateMap<UnitDTO, Domain.Entities.Unit.Unit>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.Parse(src.Id)))
                 .ForMember(dest => dest.ManufactererName, opt => opt.MapFrom(src => src.ManufactererName))
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.AreaName, opt => opt.MapFrom(src => src.AreaName))
-                .ForMember(dest => dest.Variables, opt => opt.MapFrom(src => src.Variables)); // Assuming Variables is a collection of AnalogicVariable
+                .ForMember(dest => dest.Variables, opt => opt.MapFrom(src => src.Variables))
+                 .ForMember(dest => dest.UnitTypes, opt => opt.MapFrom(src => src.Types_)); ; // Assuming Variables is a collection of AnalogicVariable
         }
     }
 }

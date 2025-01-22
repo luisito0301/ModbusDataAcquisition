@@ -26,6 +26,7 @@ message UnitDTO {
     string code = 3;                 // Código asociado a la unidad
     string area_name = 4;            // Nombre del área donde se encuentran
     repeated AnalogicVariableDTO variables = 5;  // Variables asociadas a la unidad
+    UnitType Types=6;
 }
 
 // Mensaje para una colección de Unidades
@@ -47,4 +48,5 @@ message CreateUnitRequest {
     string code = 2;               // Código asociado a la unidad
     string area_name = 3;          // Nombre del área donde se encuentran
     repeated AnalogicVariableDTO variables = 4; // Variables asociadas a la unidad
+    UnitType Types=5;
 }

@@ -33,7 +33,8 @@ namespace ModbusData.Application.Units.Commands.CreateUnit
                 request.ManufactererName,
                 request.Code,
                 request.AreaName,
-                request._variables // Assuming Variables is a List<AnalogicVariable>
+                request.Type
+                
             );
 
             // Add the new Unit to the repository

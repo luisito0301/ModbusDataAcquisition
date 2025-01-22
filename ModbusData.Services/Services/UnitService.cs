@@ -32,7 +32,9 @@ namespace ModbusData.Services.Services
                 request.ManufactererName,
                 request.Code,
                 request.AreaName,
+                
                 request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList() // Asegúrate de que AnalogicVariable esté mapeado
+                , (Domain.Types.UnitType)request.Types_
             );
 
             var result = _mediator.Send(command).Result; // Synchronous call
