@@ -1,6 +1,6 @@
 ﻿using ModbusData.Application.Abstract;
 
-namespace ModbusData.Units.Commands.DeleteUnits
+namespace ModbusData.Unit.Commands.DeleteUnit
 {
     public record DeleteUnitCommand(Guid id) : ICommand<bool>;
 }

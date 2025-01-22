@@ -3,7 +3,7 @@ using MediatR;
 using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables; // Adjust the namespace as necessary
 
-namespace ModbusData.Application.Variables.Queries.GetAllUnit
+namespace ModbusData.Application.Unit.Queries.GetAllUnit
 {
     public record GetAllUnitQuery : IRequest<List<ModbusData.Domain.Entities.Unit.Unit>>;
 }

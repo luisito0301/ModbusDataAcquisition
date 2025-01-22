@@ -6,9 +6,9 @@ using ModbusData.Application.Abstract; // Assuming this is where your repository
 using ModbusData.Domain.Entities.Variables; // Adjust the namespace as necessary
 using ModbusData.Contract; // Assuming this is where your repository interface is defined
 using ModbusData.Contract.Units;
-using ModbusData.Application.Variables.Queries.GetAllUnit;
+using ModbusData.Application.Unit.Queries.GetAllUnit;
 
-namespace ModbusData.Application.Variables.Queries.GetAllAnalogicVariable
+namespace ModbusData.Application.Unit.Queries.GetAllUnits
 {
     public class GetAllUnitQueryHandler : IRequestHandler<GetAllUnitQuery, List<ModbusData.Domain.Entities.Unit.Unit>>
     {

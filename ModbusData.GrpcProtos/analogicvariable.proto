@@ -8,6 +8,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 import "common.proto"; 
+import "digitalvariable.proto";
 
 // Service definition for managing AnalogicVariables
 service AnalogicVariable {
@@ -55,4 +56,9 @@ message CreateAnalogicVariableRequest {
     double value = 7; // Value of the analog variable
     string unitid=8;
 }
-
+message Variable {
+    oneof kind{
+        AnalogicVariableDTO analogicvariable = 1;
+        DigitalVariableDTO digitalvariable = 2; 
+    } 
+}

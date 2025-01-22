@@ -16,4 +16,11 @@
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModbusNetwork\Commands\DeleteModbusNetwork\" />
+    <Folder Include="ModbusNetwork\Commands\UpdateModbusNetwork\" />
+    <Folder Include="ModbusNetwork\Queries\" />
+    <Folder Include="SlaveDevice\" />
+  </ItemGroup>
+
 </Project>

@@ -1,11 +1,11 @@
 ﻿using ModbusData.Application.Abstract;
 using ModbusData.Domain.Entities.Unit; // Adjust the namespace as necessary
 using ModbusData.Contract; // Assuming this is where your repository interface is defined
-using ModbusData.Units.Commands.DeleteUnits;
+using ModbusData.Unit.Commands.DeleteUnit;
 using ModbusData.Contract.Units;
 
 
-namespace ModbusData.Application.Variables.Commands.DeleteUnit
+namespace ModbusData.Application.Unit.Commands.DeleteUnit
 {
     public class DeleteUnitCommandHandler : ICommandHandler<DeleteUnitCommand, bool>
     {

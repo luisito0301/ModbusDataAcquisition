@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using ModbusData.Contract.Units;
 using ModbusData.Domain.Entities.Variables;
-using ModbusData.Application.Variables.Queries.GetUnit;
+using ModbusData.Application.Unit.Queries.GetUnit;
 
-namespace ModbusData.Application.Variables.Queries.GetAnalogicVariable
+namespace ModbusData.Application.Unit.Queries.GetUnit
 {
     public class GetUnitByIdQueryHandler : IRequestHandler<GetUnitByIdQuery, Domain.Entities.Unit.Unit>
     {
