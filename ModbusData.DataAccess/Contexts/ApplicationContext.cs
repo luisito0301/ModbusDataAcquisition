@@ -4,10 +4,14 @@ using ModbusData.Domain.Entities.Variables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using ModbusData.Domain.Entities.Modbus_Network;
+
 using ModbusData.DataAccess.FluentConfigurations.Devices;
 using ModbusData.DataAccess.FluentConfigurations.ModbusNetworks;
 using ModbusData.DataAccess.FluentConfigurations.Units;
 using ModbusData.DataAccess.FluentConfigurations.Variables;
+using ModbusData.DataAccess.FluentConfigurations.Samples; // Importa la configuración Fluent de Sample
+using ModbusData.Domain.Records;
+
 namespace ModbusData.DataAccess.Contexts
 {
     public class ApplicationContext : DbContext
@@ -17,6 +21,7 @@ namespace ModbusData.DataAccess.Contexts
         public DbSet<SlaveDevice> SlaveDevices { get; set; }
         public DbSet<Variable> Variables { get; set; }
         public DbSet<Unit> Units { get; set; }
+        public DbSet<Sample> Samples { get; set; } // Agrega DbSet para Sample
         #endregion
 
         public ApplicationContext() { }
@@ -31,7 +36,6 @@ namespace ModbusData.DataAccess.Contexts
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlite("Data Source=modbusdata.db"); // Default connection string
-
             }
         }
 
@@ -45,10 +49,8 @@ namespace ModbusData.DataAccess.Contexts
             modelBuilder.ApplyConfiguration(new AnalogicVariableEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DigitalVariableEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new VariableEntityTypeConfigurationBase());
-
-    
+            modelBuilder.ApplyConfiguration(new SampleEntityTypeConfiguration()); // Aplica la configuración Fluent de Sample
         }
-
 
         private static DbContextOptions GetOptions(string connectionString)
         {

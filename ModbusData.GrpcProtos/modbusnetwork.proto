@@ -1,4 +1,4 @@
-﻿﻿syntax = "proto3";
+﻿syntax="proto3";
 
 option csharp_namespace = "ModbusData.GrpcProtos";
 
@@ -6,7 +6,7 @@ package GrpcProtos;
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
-import "variable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
+import "analogicvariable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
 import "common.proto";
 import "unit.proto";
 import "slave.proto"; // Asegúrate de que este archivo existe y contiene la definición de SlaveDeviceDTO

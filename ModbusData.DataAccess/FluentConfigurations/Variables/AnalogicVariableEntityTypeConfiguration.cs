@@ -21,9 +21,7 @@ namespace ModbusData.DataAccess.FluentConfigurations.Variables
             // Configure the base type for TPH inheritance
             builder.HasBaseType<Variable>();
 
-            // Configure the Value property with precision
-            builder.Property(x => x.Value)
-                   .HasPrecision(18, 2); // Configure precision for two decimal places
+            
 
            
         }

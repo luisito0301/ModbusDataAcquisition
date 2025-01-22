@@ -19,6 +19,7 @@ namespace ModbusData.Domain.Records
         public DateTime Date { get; init; }
 
         // Optionally, you could add a value property if needed
-        // public double Value { get; init; }
+         public double Value { get; init; }
+
     }
 }

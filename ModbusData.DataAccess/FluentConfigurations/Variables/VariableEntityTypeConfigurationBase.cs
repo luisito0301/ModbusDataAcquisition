@@ -35,15 +35,11 @@ namespace ModbusData.DataAccess.FluentConfigurations.Variables
                    .HasForeignKey(x => x.UnitId); // Establecer la clave foránea
 
             // Configuración para Sample como un tipo propio (owned type)
-            builder.OwnsMany(v => v.Samples, a =>
-            {
-                a.WithOwner().HasForeignKey(s => s.VariableId);
-                a.Property(s => s.Date).IsRequired();
-                a.HasKey(s => new { s.VariableId, s.Date }); // Clave compuesta
 
 
-            });
+
+        }
         }
     }
-}
+
 

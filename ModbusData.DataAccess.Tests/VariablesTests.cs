@@ -164,76 +164,31 @@ namespace ModbusData.DataAccess.Tests
             Assert.IsNull(result); // The result should be null since the ID is invalid
         }
 
-        /// <summary>Prueba para verificar que AddSample agrega una muestra a una variable.</summary>
+        /// <summary>Prueba para verificar que Delete elimina una variable.</summary>
         [TestMethod]
-        public void AddSample_ShouldAddSampleToVariable()
+        public void Delete_ShouldRemoveVariable()
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Continuous); // Incluye UnitType
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Storage); // Incluye UnitType
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
 
-            var variable = new AnalogicVariable(Guid.NewGuid(), "Humidity", VariableType.Analogic, true, "Humidity", TimeSpan.FromSeconds(15), 102)
+            var variable = new AnalogicVariable(Guid.NewGuid(), "Temperature", VariableType.Analogic, true, "Temp", TimeSpan.FromSeconds(5), 100)
             {
                 UnitId = unitId // Set the foreign key to the existing unit
             };
-            _context.Set<AnalogicVariable>().Add(variable);
-            _unitOfWork.SaveChanges(); // Save the variable first to ensure it exists
 
-            var sample = new Sample
-            {
-                Date = DateTime.Now
-            };
+            _context.Set<AnalogicVariable>().Add(variable);
+            _unitOfWork.SaveChanges(); // Save the variable first
 
             // Act
-            _variableRepository.AddSample(variable.Id, sample);
+            _variableRepository.Delete(variable.Id);
             _unitOfWork.SaveChanges();
 
             // Assert
-            var result = _variableRepository.GetById(variable.Id);
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Samples.Count);
-            Assert.AreEqual(sample.Date, result.Samples.First().Date);
-        }
-
-        /// <summary>Prueba para verificar que GetSamplesByDate devuelve las muestras en un rango de fechas.</summary>
-        [TestMethod]
-        public void GetSamplesByDate_ShouldReturnSamplesInDateRange()
-        {
-            // Arrange
-            var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Batch); // Incluye UnitType
-            _context.Set<Unit>().Add(unit);
-            _unitOfWork.SaveChanges(); // Save the unit first to ensure it exists
-
-            var variable = new AnalogicVariable(Guid.NewGuid(), "Humidity", VariableType.Analogic, true, "Humidity", TimeSpan.FromSeconds(15), 102)
-            {
-                UnitId = unitId // Set the foreign key to the existing unit
-            };
-            _context.Set<AnalogicVariable>().Add(variable);
-            _unitOfWork.SaveChanges(); // Save the variable first to ensure it exists
-
-            var sample1 = new Sample
-            {
-                Date = DateTime.Now.AddDays(-1)
-            };
-            var sample2 = new Sample
-            {
-                Date = DateTime.Now
-            };
-
-            _variableRepository.AddSample(variable.Id, sample1);
-            _variableRepository.AddSample(variable.Id, sample2);
-            _unitOfWork.SaveChanges();
-
-            // Act
-            var result = _variableRepository.GetSamplesByDate(variable.Id, DateTime.Now.AddDays(-2), DateTime.Now.AddDays(1)).ToList();
-            // Assert
-            Assert.AreEqual(2, result.Count);
-            Assert.IsTrue(result.Any(s => s.Date == sample1.Date));
-            Assert.IsTrue(result.Any(s => s.Date == sample2.Date));
+            var result = _context.Set<AnalogicVariable>().Find(variable.Id);
+            Assert.IsNull(result); // The result should be null since the variable is deleted
         }
     }
 }
-//

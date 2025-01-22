@@ -22,6 +22,19 @@ namespace ModbusData.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Samples",
+                columns: table => new
+                {
+                    VariableId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", maxLength: 100, nullable: false),
+                    Value = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Samples", x => new { x.Date, x.VariableId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Units",
                 columns: table => new
                 {
@@ -94,8 +107,7 @@ namespace ModbusData.DataAccess.Migrations
                 name: "AnalogicVariables",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Value = table.Column<double>(type: "REAL", precision: 18, scale: 2, nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,8 +124,7 @@ namespace ModbusData.DataAccess.Migrations
                 name: "DigitalVariables",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Value = table.Column<short>(type: "INTEGER", maxLength: 1024, nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,24 +132,6 @@ namespace ModbusData.DataAccess.Migrations
                     table.ForeignKey(
                         name: "FK_DigitalVariables_Variables_Id",
                         column: x => x.Id,
-                        principalTable: "Variables",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sample",
-                columns: table => new
-                {
-                    VariableId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sample", x => new { x.VariableId, x.Date });
-                    table.ForeignKey(
-                        name: "FK_Sample_Variables_VariableId",
-                        column: x => x.VariableId,
                         principalTable: "Variables",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -174,7 +167,7 @@ namespace ModbusData.DataAccess.Migrations
                 name: "DigitalVariables");
 
             migrationBuilder.DropTable(
-                name: "Sample");
+                name: "Samples");
 
             migrationBuilder.DropTable(
                 name: "Variables");

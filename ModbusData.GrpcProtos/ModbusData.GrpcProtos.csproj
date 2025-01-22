@@ -23,10 +23,6 @@
 	<ItemGroup>
 		<Protobuf Include="*.proto" GrpcServices=" Both" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Protobuf Remove="modbusnetwork.proto" />
-	  <Protobuf Remove="slave.proto" />
-	</ItemGroup>
 	
 
 </Project>

@@ -14,9 +14,6 @@ namespace ModbusData.Contract.Variables
         void Update(T variable);
         void Delete(Guid id);
 
-        // Métodos para gestionar samples
-        void AddSample(Guid variableId, Sample sample);
-        IEnumerable<Sample> GetSamplesByDate(Guid variableId, DateTime startDate, DateTime endDate);
-        IEnumerable<Sample> GetSamplesByDateRange(DateTime startDate, DateTime endDate);
+      
     }
 }

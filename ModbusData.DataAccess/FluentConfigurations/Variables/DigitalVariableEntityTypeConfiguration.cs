@@ -19,11 +19,7 @@ namespace ModbusData.DataAccess.FluentConfigurations.Variables
 
             builder.ToTable("DigitalVariables");
             builder.HasBaseType(typeof(Variable));
-            builder.Property(x => x.Value)
-                   .HasConversion<short>()
-                   .HasColumnName("Value")
-                   .HasMaxLength(1024)
-                   .IsRequired();
+            
           
           
         }
