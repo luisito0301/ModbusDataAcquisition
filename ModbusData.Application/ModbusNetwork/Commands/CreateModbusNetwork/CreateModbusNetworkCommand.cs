@@ -9,6 +9,6 @@ namespace ModbusData.Application.ModbusNetwork.Commands.CreateModbusNetwork
 {
     public record CreateModbusNetworkCommand(
         IP MasterIpAddress, // Dirección IP del dispositivo maestro
-        List<SlaveDevice> Slaves // Lista de dispositivos esclavos asociados a la red
+        List<ModbusData.Domain.Entities.Device.SlaveDevice> Slaves // Lista de dispositivos esclavos asociados a la red
     ) : ICommand<Domain.Entities.Modbus_Network.ModbusNetwork>; // Asegúrate de que ModbusNetwork sea el tipo de retorno correcto
 }

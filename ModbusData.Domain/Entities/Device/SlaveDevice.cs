@@ -9,6 +9,8 @@ namespace ModbusData.Domain.Entities.Device
 {
     public class SlaveDevice : Entity
     {
+        private IP ipAddress;
+
         public IP IpAddress { get; set; }  // IP address of the device
         public List<Variable> Variables { get; set; } = new List<Variable>();  // Associated variables
 
@@ -22,5 +24,10 @@ namespace ModbusData.Domain.Entities.Device
 
         // Required by Entity Framework
         protected SlaveDevice() { }
+
+        public SlaveDevice(Guid id, IP ipAddress) : base(id)
+        {
+            this.ipAddress = ipAddress;
+        }
     }
 }
