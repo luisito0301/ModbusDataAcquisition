@@ -17,7 +17,7 @@ namespace ModbusData.Services
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
+
             // Add services to the container.
             builder.Services.AddSingleton("Data Source=Data.sqlite");
             builder.Services.AddScoped<ApplicationContext>();
@@ -49,5 +49,3 @@ namespace ModbusData.Services
         }
     }
 }
-
-

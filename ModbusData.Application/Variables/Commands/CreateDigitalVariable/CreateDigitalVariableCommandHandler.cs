@@ -7,24 +7,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using ModbusData.Application.Abstract;
 
-namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
+namespace ModbusData.Application.Variables.Commands.CreateDigitalVariable
 {
-    public class CreateAnalogicVariableCommandHandler : ICommandHandler<CreateAnalogicVariableCommand, AnalogicVariable>
+    public class CreateDigitalVariableCommandHandler : ICommandHandler<CreateDigitalVariableCommand, DigitalVariable>
     {
-        private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
+        private readonly IVariableRepository<DigitalVariable> _digitalVariableRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateAnalogicVariableCommandHandler(
-            IVariableRepository<AnalogicVariable> analogicVariableRepository,
+        public CreateDigitalVariableCommandHandler(
+            IVariableRepository<DigitalVariable> digitalVariableRepository,
             IUnitOfWork unitOfWork)
         {
-            _analogicVariableRepository = analogicVariableRepository;
+            _digitalVariableRepository = digitalVariableRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public Task<AnalogicVariable> Handle(CreateAnalogicVariableCommand request, CancellationToken cancellationToken)
+        public Task<DigitalVariable> Handle(CreateDigitalVariableCommand request, CancellationToken cancellationToken)
         {
-            var analogicVariable = new AnalogicVariable(
+            var digitalVariable = new DigitalVariable(
                 Guid.NewGuid(),
                 request.Name,
                 request.Type,
@@ -37,10 +37,10 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
                 UnitId = request.UnitId
             };
 
-            _analogicVariableRepository.Add(analogicVariable);
+            _digitalVariableRepository.Add(digitalVariable);
             _unitOfWork.SaveChanges();
 
-            return Task.FromResult(analogicVariable);
+            return Task.FromResult(digitalVariable);
         }
     }
 }

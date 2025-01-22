@@ -1,4 +1,5 @@
-﻿using ModbusData.Application.Abstract;
+﻿using MediatR;
+using ModbusData.Application.Abstract;
 using ModbusData.Domain.Entities.Variables;
 using ModbusData.Domain.Types;
 using System;
@@ -12,6 +13,6 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
         string Code,
         TimeSpan SamplingPeriod,
         int ModbusAddress,
-        double Value,
-        Guid UnitId) : CreateVariableCommand(Name, Type, IsMeasurement, Code, SamplingPeriod, ModbusAddress, UnitId);
+        Guid UnitId,
+        double Value) : ICommand<AnalogicVariable>;
 }

@@ -1,8 +1,6 @@
-﻿using ModbusData.GrpcProtos; // Ensure you have the correct namespace for your gRPC Protos
+﻿using ModbusData.GrpcProtos; // Asegúrate de que tienes el espacio de nombres correcto para tus gRPC Protos
 using Grpc.Net.Client;
 using System;
-using System.Diagnostics.Metrics;
-using Google.Protobuf.WellKnownTypes;
 
 namespace ModbusData.ConsoleApp
 {
@@ -30,61 +28,64 @@ namespace ModbusData.ConsoleApp
                 return;
             }
 
-            var unitClient = new ModbusData.GrpcProtos.Unit.UnitClient(channel);
-            var variableClient = new ModbusData.GrpcProtos.AnalogicVariable.AnalogicVariableClient(channel);
+            var analogicVariableClient = new AnalogicVariable.AnalogicVariableClient(channel); // Cliente para variables analógicas
+            var digitalVariableClient = new DigitalVariable.DigitalVariableClient(channel); // Cliente para variables digitales
 
-            // Crear una unidad
-            Console.WriteLine("Presione una tecla para crear una unidad");
-            Console.ReadKey();
-
-            var createUnitResponse = unitClient.CreateUnit(new CreateUnitRequest()
-            {
-                ManufactererName = "Test Manufacturer",
-                Code = "TU001",
-                AreaName = "Test Area",
-                Variables = { } // Puedes dejarlo vacío o agregar variables si es necesario
-            });
-
-            if (createUnitResponse is null)
-            {
-                Console.WriteLine("Cannot create unit");
-                channel.Dispose();
-                return;
-            }
-            else
-            {
-                Console.WriteLine($"Creación de unidad exitosa. ID: {createUnitResponse.Id}");
-            }
-
-            // Crear una variable analógica y asignar el ID de la unidad
+            // Crear una variable analógica
             Console.WriteLine("Presione una tecla para crear una variable analógica");
             Console.ReadKey();
 
-            var createResponse = variableClient.CreateAnalogicVariable(new CreateAnalogicVariableRequest()
+            var createAnalogicVariableResponse = analogicVariableClient.CreateAnalogicVariable(new CreateAnalogicVariableRequest()
             {
-                Name = "Test Variable",
-                Type = VariableType.Analogic, // Adjust as necessary
+                Name = "Test Analogic Variable",
+                Type = VariableType.Analogic, // Tipo de variable
                 IsMeasurement = true,
-                Code = "TV001",
-                SamplingPeriod = "00:00:01", // Example TimeSpan
+                Code = "TAV001",
+                SamplingPeriod = "00:00:01", // Ejemplo de TimeSpan
                 ModbusAddress = 123,
                 Value = 10.0,
-                Unitid = createUnitResponse.Id // Asignar el ID de la unidad creada
+                Unitid = "123e4567-e89b-12d3-a456-426614174000" // Ejemplo de ID de unidad
             });
 
-            if (createResponse is null)
+            if (createAnalogicVariableResponse is null)
             {
-                Console.WriteLine("Cannot create analogic variable");
+                Console.WriteLine("No se puede crear la variable analógica");
                 channel.Dispose();
                 return;
             }
             else
             {
-                Console.WriteLine($"Creación exitosa de la variable analógica. ID: {createResponse.Id}");
+                Console.WriteLine($"Creación exitosa de la variable analógica. ID: {createAnalogicVariableResponse.Base.Id}");
             }
 
-            // Resto del código para obtener, modificar y eliminar la variable analógica...
-            // (El código que ya tenías para obtener, modificar y eliminar la variable analógica)
+            // Crear una variable digital
+            Console.WriteLine("Presione una tecla para crear una variable digital");
+            Console.ReadKey();
+
+            var createDigitalVariableResponse = digitalVariableClient.CreateDigitalVariable(new CreateDigitalVariableRequest()
+            {
+                Name = "Test Digital Variable",
+                Type = VariableType.Digital, // Tipo de variable
+                IsMeasurement = true,
+                Code = "TDV001",
+                SamplingPeriod = "00:00:01", // Ejemplo de TimeSpan
+                ModbusAddress = 456,
+                Value = 1.0,
+                Unitid = "123e4567-e89b-12d3-a456-426614174000" // Ejemplo de ID de unidad
+            });
+
+            if (createDigitalVariableResponse is null)
+            {
+                Console.WriteLine("No se puede crear la variable digital");
+                channel.Dispose();
+                return;
+            }
+            else
+            {
+                Console.WriteLine($"Creación exitosa de la variable digital. ID: {createDigitalVariableResponse.Base.Id}");
+            }
+
+            // Resto del código para obtener, modificar y eliminar las variables...
 
             channel.Dispose();
         }

@@ -4,14 +4,15 @@ using ModbusData.Domain.Entities.Variables;
 using ModbusData.Domain.Types;
 using System;
 
-namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
+namespace ModbusData.Application.Variables.Commands.CreateDigitalVariable
 {
-    public abstract record CreateVariableCommand(
+    public record CreateDigitalVariableCommand(
         string Name,
         VariableType Type,
         bool IsMeasurement,
         string Code,
         TimeSpan SamplingPeriod,
         int ModbusAddress,
-        Guid UnitId) : ICreateVariableCommand;
+        Guid UnitId,
+        short Value) : ICommand<DigitalVariable>;
 }

@@ -4,16 +4,18 @@ using ModbusData.Application.Variables.Commands.DeleteAnalogicVariable;
 using ModbusData.Application.Variables.Commands.UpdateAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAllAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
-using ModbusData.Domain.Types; // Clases del dominio
-using ModbusData.Domain.Entities.Variables; // Clases del dominio
-using ModbusData.GrpcProtos; // Clases de gRPC
+using ModbusData.Domain.Types;
+using ModbusData.GrpcProtos;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ModbusData.Domain.Entities.Variables;
+using ModbusData.Variables.Commands.DeleteAnalogicVariable;
+
 
 namespace ModbusData.Services.Services
 {
@@ -34,7 +36,7 @@ namespace ModbusData.Services.Services
         {
             var command = new CreateAnalogicVariableCommand(
                 request.Name,
-                (Domain.Types.VariableType)request.Type, // VariableType del dominio
+                (Domain.Types.VariableType)request.Type,
                 request.IsMeasurement,
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
@@ -43,34 +45,34 @@ namespace ModbusData.Services.Services
                 Guid.Parse(request.Unitid)
             );
 
-            var result = _mediator.Send(command).Result; // Llamada sincrónica
-            return Task.FromResult(_mapper.Map<AnalogicVariableDTO>(result)); // AnalogicVariableDTO de gRPC
+            var result = _mediator.Send(command).Result; // Synchronous call
+            return Task.FromResult(_mapper.Map<AnalogicVariableDTO>(result));
         }
 
         public override Task<NullableAnalogicVariableDTO> GetAnalogicVariable(GetRequest request, ServerCallContext context)
         {
             var query = new GetAnalogicVariableByIdQuery(Guid.Parse(request.Id));
-            var result = _mediator.Send(query).Result; // Llamada sincrónica
+            var result = _mediator.Send(query).Result; // Synchronous call
 
-            if (result == null)
+            if (result is null)
             {
                 _logger.LogWarning("AnalogicVariable not found for ID: {AnalogicVariableId}", request.Id);
-                return Task.FromResult(new NullableAnalogicVariableDTO { Null = NullValue.NullValue });
+                return Task.FromResult(new NullableAnalogicVariableDTO() { Null = NullValue.NullValue });
             }
 
             _logger.LogInformation("AnalogicVariable found for ID: {AnalogicVariableId}", request.Id);
-            return Task.FromResult(new NullableAnalogicVariableDTO { AnalogicVariable = _mapper.Map<AnalogicVariableDTO>(result) }); // AnalogicVariableDTO de gRPC
+            return Task.FromResult(new NullableAnalogicVariableDTO { AnalogicVariable = _mapper.Map<AnalogicVariableDTO>(result) });
         }
 
-        public override Task<GrpcProtos.AnalogicVariable> GetAllAnalogicVariables(Empty request, ServerCallContext context)
+        public override Task<AnalogicVariables> GetAllAnalogicVariables(Empty request, ServerCallContext context)
         {
             var query = new GetAllAnalogicVariableQuery();
-            var result = _mediator.Send(query).Result; // Llamada sincrónica
+            var result = _mediator.Send(query).Result; // Synchronous call
 
             var analogicVariableDTOs = new AnalogicVariables();
-            analogicVariableDTOs.Items.AddRange(result.Select(m => _mapper.Map<AnalogicVariableDTO>(m))); // AnalogicVariableDTO de gRPC
+            analogicVariableDTOs.Items.AddRange(result.Select(m => _mapper.Map<AnalogicVariableDTO>(m)));
 
-            return Task.FromResult(analogicVariableDTOs);
+            return Task.FromResult(analogicVariableDTOs); ;
         }
 
         public override Task<Empty> UpdateAnalogicVariable(AnalogicVariableDTO request, ServerCallContext context)
@@ -78,7 +80,7 @@ namespace ModbusData.Services.Services
             var command = new UpdateAnalogicVariableCommand(
                 Guid.Parse(request.Id),
                 request.Name,
-                (VariableType)request.Type, // VariableType del dominio
+                (Domain.Types.VariableType)request.Type,
                 request.IsMeasurement,
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
@@ -87,14 +89,14 @@ namespace ModbusData.Services.Services
                 Guid.Parse(request.Unitid)
             );
 
-            _mediator.Send(command); // Llamada sincrónica
+            _mediator.Send(command); // Synchronous call
             return Task.FromResult(new Empty());
         }
 
         public override Task<Empty> DeleteAnalogicVariable(DeleteRequest request, ServerCallContext context)
         {
             var command = new DeleteAnalogicVariableCommand(Guid.Parse(request.Id));
-            _mediator.Send(command); // Llamada sincrónica
+            _mediator.Send(command); // Synchronous call
             return Task.FromResult(new Empty());
         }
     }

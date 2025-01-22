@@ -25,7 +25,7 @@ namespace ModbusData.Services.Services
             _logger = logger;
         }
 
-        public override  Task<UnitDTO> CreateUnit(CreateUnitRequest request, ServerCallContext context)
+        public override Task<UnitDTO> CreateUnit(CreateUnitRequest request, ServerCallContext context)
         {
             // Mapear el request a un comando
             var command = new CreateUnitCommand(
@@ -33,8 +33,7 @@ namespace ModbusData.Services.Services
                 request.Code,
                 request.AreaName,
                 request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList() // Asegúrate de que AnalogicVariable esté mapeado
-           , request.UnitTypes
-                );
+            );
 
             var result = _mediator.Send(command).Result; // Synchronous call
             return Task.FromResult(_mapper.Map<UnitDTO>(result));

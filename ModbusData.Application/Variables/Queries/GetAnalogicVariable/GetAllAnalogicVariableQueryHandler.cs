@@ -6,10 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using ModbusData.Contract.Variables;
 using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
+using ModbusData.Application.Abstract;
 
 namespace ModbusData.Application.Variables.Queries.GetAnalogicVariable
 {
-    public class GetAllVariablesQueryHandler : IRequestHandler<GetAllVariablesQuery, List<Variable>>
+    public class GetAllVariablesQueryHandler : ICommandHandler<GetAllVariablesQuery, List<Variable>>
     {
         private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
         private readonly IVariableRepository<DigitalVariable> _digitalVariableRepository;

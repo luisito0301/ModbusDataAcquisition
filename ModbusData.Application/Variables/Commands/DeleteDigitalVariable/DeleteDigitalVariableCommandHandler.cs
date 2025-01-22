@@ -9,20 +9,20 @@ using ModbusData.Contract.Variables;
 
 namespace ModbusData.Application.Variables.Commands.DeleteAnalogicVariable
 {
-    public class DeleteAnalogicVariableCommandHandler : ICommandHandler<DeleteAnalogicVariableCommand, bool>
+    public class DeleteDigitalVariableCommandHandler : ICommandHandler<DeleteDigitalVariableCommand, bool>
     {
-        private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
+        private readonly IVariableRepository<DigitalVariable> _analogicVariableRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteAnalogicVariableCommandHandler(
-            IVariableRepository<AnalogicVariable> analogicVariableRepository,
+        public DeleteDigitalVariableCommandHandler(
+            IVariableRepository<DigitalVariable> analogicVariableRepository,
             IUnitOfWork unitOfWork)
         {
             _analogicVariableRepository = analogicVariableRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> Handle(DeleteAnalogicVariableCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(DeleteDigitalVariableCommand request, CancellationToken cancellationToken)
         {
             // Find the AnalogicVariable by ID
             var analogicVariableToDelete = _analogicVariableRepository.GetById(request.VariableId); // Assuming you have a method to get by ID
