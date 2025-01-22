@@ -1,0 +1,64 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "common.proto"; 
+import "digitalvariable.proto";
+
+// Service definition for managing AnalogicVariables
+service AnalogicVariable {
+    rpc CreateAnalogicVariable(CreateAnalogicVariableRequest) returns (AnalogicVariableDTO);
+    rpc GetAnalogicVariable(GetRequest) returns (NullableAnalogicVariableDTO);
+    rpc GetAllAnalogicVariables(google.protobuf.Empty) returns (AnalogicVariables);
+    rpc UpdateAnalogicVariable(AnalogicVariableDTO) returns (google.protobuf.Empty);
+    rpc DeleteAnalogicVariable(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+// DTO for AnalogicVariable
+message AnalogicVariableDTO {
+    string id = 1; // Unique identifier
+    string name = 2; // Name of the variable
+    VariableType type = 3; // Type of the variable (Digital or Analogic)
+    bool isMeasurement = 4; // Is it a measurement?
+    string code = 5; // Code associated with the variable
+    string samplingPeriod = 6; // Sampling period as a string
+    int32 modbusAddress = 7; // Modbus address
+    double value = 8; // Value of the analog variable
+    string unitid=9;
+}
+
+// Message for a collection of AnalogicVariables
+message AnalogicVariables {
+    repeated AnalogicVariableDTO items = 1; // List of AnalogicVariableDTOs
+}
+
+// Nullable DTO for AnalogicVariable
+message NullableAnalogicVariableDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Represents a null value
+        AnalogicVariableDTO analogicVariable = 2; // The actual AnalogicVariableDTO
+    }
+}
+
+// Request message for creating an AnalogicVariable
+message CreateAnalogicVariableRequest {
+    string name = 1; // Name of the variable
+    VariableType type = 2; // Type of the variable
+    bool isMeasurement = 3; // Is it a measurement?
+    string code = 4; // Code associated with the variable
+    string samplingPeriod = 5; // Sampling period as a string
+    int32 modbusAddress = 6; // Modbus address
+    double value = 7; // Value of the analog variable
+    string unitid=8;
+}
+message Variable {
+    oneof kind{
+        AnalogicVariableDTO analogicvariable = 1;
+        DigitalVariableDTO digitalvariable = 2; 
+    } 
+}

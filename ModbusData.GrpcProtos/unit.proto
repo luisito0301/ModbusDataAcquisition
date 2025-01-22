@@ -1,0 +1,52 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "common.proto"; 
+import "analogicvariable.proto"; // Asegúrate de que este archivo existe y contiene la definición de Variable
+
+// Definición del servicio para gestionar Unidades
+service Unit {
+    rpc CreateUnit(CreateUnitRequest) returns (UnitDTO);
+    rpc GetUnit(GetRequest) returns (NullableUnitDTO);
+    rpc GetAllUnits(google.protobuf.Empty) returns (Units);
+    rpc UpdateUnit(UnitDTO) returns (google.protobuf.Empty);
+    rpc DeleteUnit(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+// DTO para Unit
+message UnitDTO {
+    string id = 1;                  // Identificador único de la unidad
+    string manufacterer_name = 2;    // Nombre del fabricante
+    string code = 3;                 // Código asociado a la unidad
+    string area_name = 4;            // Nombre del área donde se encuentran
+    repeated Variable variables = 5;  // Variables asociadas a la unidad
+    UnitType Types=6;
+}
+
+// Mensaje para una colección de Unidades
+message Units {
+    repeated UnitDTO items = 1; // Lista de UnitDTOs
+}
+
+// Nullable DTO para Unit
+message NullableUnitDTO {
+    oneof kind {
+        google.protobuf.NullValue null = 1; // Representa un valor nulo
+        UnitDTO unit = 2; // El DTO de la unidad
+    }
+}
+
+// Mensaje de solicitud para crear una Unidad
+message CreateUnitRequest {
+    string manufacterer_name = 1; // Nombre del fabricante
+    string code = 2;               // Código asociado a la unidad
+    string area_name = 3;          // Nombre del área donde se encuentran
+    repeated Variable variables = 4; // Variables asociadas a la unidad
+    UnitType Types=5;
+}
