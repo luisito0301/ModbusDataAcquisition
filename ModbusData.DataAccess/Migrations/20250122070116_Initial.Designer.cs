@@ -11,7 +11,7 @@ using ModbusData.DataAccess.Contexts;
 namespace ModbusData.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250122065031_Initial")]
+    [Migration("20250122070116_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
