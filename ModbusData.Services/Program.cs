@@ -40,6 +40,7 @@ namespace ModbusData.Services
 
             // Configure the HTTP request pipeline.
             app.MapGrpcService<AnalogicVariableService>();
+            app.MapGrpcService<DigitalVariableService>();
             app.MapGrpcService<UnitService>();
 
 

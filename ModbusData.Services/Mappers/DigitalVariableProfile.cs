@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using ModbusData.Domain.Types;
+using ModbusData.GrpcProtos;
+namespace ModbusData.Services.Mappers
+{
+    public class DigitalVariableProfile : Profile
+    {
+        public DigitalVariableProfile()
+        {
+            // Mapping from Domain Entity to gRPC DTO
+            CreateMap<ModbusData.Domain.Entities.Variables.DigitalVariable, DigitalVariableDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => (Domain.Types.VariableType)src.Type)) // Assuming VariableType is an enum
+                .ForMember(dest => dest.IsMeasurement, opt => opt.MapFrom(src => src.IsMeasurement))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.SamplingPeriod, opt => opt.MapFrom(src => src.SamplingPeriod.ToString())) // Convert TimeSpan to string
+                .ForMember(dest => dest.ModbusAddress, opt => opt.MapFrom(src => src.ModbusAddress))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
+                .ForMember(dest => dest.Unitid, opt => opt.MapFrom(src => src.UnitId.ToString()));
+
+            // Mapping from gRPC DTO to Domain Entity
+            CreateMap<DigitalVariableDTO, Domain.Entities.Variables.DigitalVariable>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.Parse(src.Id)))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => (Domain.Types.VariableType)src.Type)) // Assuming VariableType is an enum
+                .ForMember(dest => dest.IsMeasurement, opt => opt.MapFrom(src => src.IsMeasurement))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.SamplingPeriod, opt => opt.MapFrom(src => TimeSpan.Parse(src.SamplingPeriod))) // Convert string to TimeSpan
+                .ForMember(dest => dest.ModbusAddress, opt => opt.MapFrom(src => src.ModbusAddress))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
+                .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => Guid.Parse(src.Unitid)));
+        }
+    }
+}

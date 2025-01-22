@@ -30,10 +30,9 @@ namespace ModbusData.Domain.Entities.Variables
         /// </summary>
         
 
-        public DigitalVariable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress, short value)
+        public DigitalVariable(Guid id, string name, VariableType type, bool isMeasurement, string code, TimeSpan samplingPeriod, int modbusAddress)
             : base(id, name, type, isMeasurement, code, samplingPeriod, modbusAddress)
         {
-            Value = value; // Validate value during initialization
         }
 
         // Required by Entity Framework
