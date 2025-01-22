@@ -4,7 +4,7 @@ using System;
 
 namespace ModbusData.Application.Variables.Commands.UpdateAnalogicVariable
 {
-    public record UpdateAnalogicVariableCommand(
+    public record UpdateDigitalVariableCommand(
         Guid VariableId,
         string Name,
         VariableType Type,

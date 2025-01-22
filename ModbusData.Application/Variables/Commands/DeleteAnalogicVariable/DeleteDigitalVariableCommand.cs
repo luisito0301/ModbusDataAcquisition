@@ -4,5 +4,5 @@ using System;
 
 namespace ModbusData.Application.Variables.Commands.DeleteAnalogicVariable
 {
-    public record DeleteAnalogicVariableCommand(Guid VariableId) : DeleteVariableCommand(VariableId,VariableType.Analogic);
+    public record DeleteDigitalVariableCommand(Guid VariableId) : DeleteVariableCommand(VariableId,VariableType.Digital);
 }

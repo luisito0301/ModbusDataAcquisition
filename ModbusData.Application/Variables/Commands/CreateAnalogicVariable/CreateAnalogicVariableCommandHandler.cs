@@ -1,37 +1,39 @@
-﻿using System;
-using ModbusData.Application.Abstract;
+﻿using ModbusData.Application.Abstract;
 using ModbusData.Domain.Entities.Variables;
-using ModbusData.Domain.Types;
+using ModbusData.DataAccess.Repositories.Common;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ModbusData.DataAccess.Repositories.Common;
-using ModbusData.Contract;
 using ModbusData.Contract.Variables;
+using ModbusData.Contract;
+using ModbusData.Domain.Types;
 
 namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
 {
-   
+    public class CreateVariableCommandHandler : ICommandHandler<ICreateVariableCommand, Variable>
+    {
+        private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
+        private readonly IVariableRepository<DigitalVariable> _digitalVariableRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-   
-        public class CreateAnalogicVariableCommandHandler : ICommandHandler<CreateAnalogicVariableCommand?, AnalogicVariable>
+        public CreateVariableCommandHandler(
+            IVariableRepository<AnalogicVariable> analogicVariableRepository,
+            IVariableRepository<DigitalVariable> digitalVariableRepository,
+            IUnitOfWork unitOfWork)
         {
-            private readonly IVariableRepository<AnalogicVariable> _analogicvariablerepository;
-            private readonly IUnitOfWork _unitOfWork;
+            _analogicVariableRepository = analogicVariableRepository;
+            _digitalVariableRepository = digitalVariableRepository;
+            _unitOfWork = unitOfWork;
+        }
 
-            public CreateAnalogicVariableCommandHandler(
-                IVariableRepository<AnalogicVariable> analogicvariablerepository,
-                IUnitOfWork unitOfWork)
-            {
-                _analogicvariablerepository = analogicvariablerepository;
-                _unitOfWork = unitOfWork;
-            }
+        public Task<Variable> Handle(ICreateVariableCommand request, CancellationToken cancellationToken)
+        {
+            Variable result;
 
-            public Task<AnalogicVariable> Handle(CreateAnalogicVariableCommand request, CancellationToken cancellationToken)
+            if (request.Type == VariableType.Analogic)
             {
-                // Create a new instance of AnalogicVariable
-                AnalogicVariable result = new AnalogicVariable(
-                    Guid.NewGuid(), // Generate a new ID
+                result = new AnalogicVariable(
+                    Guid.NewGuid(),
                     request.Name,
                     request.Type,
                     request.IsMeasurement,
@@ -39,16 +41,37 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
                     request.SamplingPeriod,
                     request.ModbusAddress)
                 {
-                    Value = request.Value,
+                    Value = (request as CreateAnalogicVariableCommand).Value,
                     UnitId = request.UnitId
                 };
 
-            // Add the new AnalogicVariable to the repository
-                _analogicvariablerepository.Add(result);
-                _unitOfWork.SaveChanges(); // Save changes asynchronously
+                _analogicVariableRepository.Add(result as AnalogicVariable);
+            }
+            else if (request.Type == VariableType.Digital)
+            {
+                result = new DigitalVariable(
+                    Guid.NewGuid(),
+                    request.Name,
+                    request.Type,
+                    request.IsMeasurement,
+                    request.Code,
+                    request.SamplingPeriod,
+                    request.ModbusAddress)
+                {
+                    Value = (short)(request as CreateDigitalVariableCommand).Value,
+                    UnitId = request.UnitId
+                };
 
-                return Task.FromResult(result); // Return the created instance
-            
+                _digitalVariableRepository.Add(result as DigitalVariable);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported variable type.");
+            }
+
+            _unitOfWork.SaveChanges();
+
+            return Task.FromResult(result);
         }
     }
 }

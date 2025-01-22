@@ -4,7 +4,7 @@ using System;
 
 namespace ModbusData.Application.Variables.Commands.UpdateAnalogicVariable
 {
-    public record UpdateAnalogicVariableCommand(
+    public abstract record UpdateVariableCommand(
         Guid VariableId,
         string Name,
         VariableType Type,
@@ -12,6 +12,5 @@ namespace ModbusData.Application.Variables.Commands.UpdateAnalogicVariable
         string Code,
         TimeSpan SamplingPeriod,
         int ModbusAddress,
-        double Value,
-        Guid UnitId) : UpdateVariableCommand(VariableId, Name, Type, IsMeasurement, Code, SamplingPeriod, ModbusAddress, UnitId);
+        Guid UnitId) : IUpdateVariableCommand;
 }

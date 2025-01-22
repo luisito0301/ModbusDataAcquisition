@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using ModbusData.Domain.Entities.Variables; // Adjust the namespace as necessary
+using ModbusData.Domain.Entities.Variables;
 
-namespace ModbusData.Application.Variables.Queries.GetAllAnalogicVariable
+namespace ModbusData.Application.Variables.Queries.GetAnalogicVariable
 {
-    public record GetAllAnalogicVariableQuery : IRequest<List<AnalogicVariable>>;
+    public record GetAllVariablesQuery : IRequest<List<Variable>>;
 }

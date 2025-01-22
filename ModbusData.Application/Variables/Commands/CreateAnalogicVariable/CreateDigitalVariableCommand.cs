@@ -5,7 +5,7 @@ using System;
 
 namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
 {
-    public record CreateAnalogicVariableCommand(
+    public record CreateDigitalVariableCommand(
         string Name,
         VariableType Type,
         bool IsMeasurement,

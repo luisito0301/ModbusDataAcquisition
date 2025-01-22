@@ -1,25 +1,44 @@
 ﻿using MediatR;
+using ModbusData.Domain.Entities.Variables; // Ajustar el espacio de nombres si es necesario
+using ModbusData.Contract; // Asumiendo que este es donde se define la interfaz del repositorio
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using ModbusData.Contract.Variables;
-using ModbusData.Domain.Entities.Variables;
-using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
 
-namespace ModbusData.Application.Variables.Queries.GetAnalogicVariable
+namespace ModbusData.Application.Variables.Queries.GetAllAnalogicVariable
 {
-    public class GetAnalogicVariableByIdQueryHandler : IRequestHandler<GetAnalogicVariableByIdQuery, AnalogicVariable>
+    public class GetVariableByIdQueryHandler : IRequestHandler<GetVariableByIdQuery, Variable>
     {
         private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
+        private readonly IVariableRepository<DigitalVariable> _digitalVariableRepository;
 
-        public GetAnalogicVariableByIdQueryHandler(IVariableRepository<AnalogicVariable> analogicVariableRepository)
+        public GetVariableByIdQueryHandler(
+            IVariableRepository<AnalogicVariable> analogicVariableRepository,
+            IVariableRepository<DigitalVariable> digitalVariableRepository)
         {
             _analogicVariableRepository = analogicVariableRepository;
+            _digitalVariableRepository = digitalVariableRepository;
         }
 
-        public Task<AnalogicVariable> Handle(GetAnalogicVariableByIdQuery request, CancellationToken cancellationToken)
+        public Task<Variable> Handle(GetVariableByIdQuery request, CancellationToken cancellationToken)
         {
-            // Retrieve the AnalogicVariable by ID
-            var analogicVariable = _analogicVariableRepository.GetById(request.Id); // Assuming you have a method to get by ID
+            Variable result;
 
-            return Task.FromResult(analogicVariable); // Return the found AnalogicVariable or null
+            if (request is GetAnalogicVariableByIdQuery)
+            {
+                result = _analogicVariableRepository.GetById(request.Id);
+            }
+            else if (request is GetDigitalVariableByIdQuery)
+            {
+                result = _digitalVariableRepository.GetById(request.Id);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported query type.");
+            }
+
+            return Task.FromResult(result);
         }
     }
 }

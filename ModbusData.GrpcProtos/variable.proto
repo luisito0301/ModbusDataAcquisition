@@ -41,14 +41,13 @@ message SampleDTO {
     google.protobuf.Timestamp date = 2; // Date of the sample
 }
 
-// Message for a collection of AnalogicVariables
-message AnalogicVariables {
-    repeated AnalogicVariableDTO items = 1; // List of AnalogicVariableDTOs
-}
-
-// Message for a collection of DigitalVariables
-message DigitalVariables {
-    repeated DigitalVariableDTO items = 1; // List of DigitalVariableDTOs
+// Message for a collection of Variables
+message Variables {
+    repeated VariableDTO items = 1; // List of VariableDTOs
+    oneof variable {
+        AnalogicVariableDTO analogicVariable = 2;
+        DigitalVariableDTO digitalVariable = 3;
+    }
 }
 
 // Nullable DTO for AnalogicVariable
@@ -67,11 +66,15 @@ message NullableDigitalVariableDTO {
     }
 }
 
+// Service definition for managing Variables
+service Variable {
+    rpc GetAllVariables(google.protobuf.Empty) returns (Variables);
+}
+
 // Service definition for managing AnalogicVariables
 service AnalogicVariable {
     rpc CreateAnalogicVariable(CreateAnalogicVariableRequest) returns (AnalogicVariableDTO);
     rpc GetAnalogicVariable(GetRequest) returns (NullableAnalogicVariableDTO);
-    rpc GetAllAnalogicVariables(google.protobuf.Empty) returns (AnalogicVariables);
     rpc UpdateAnalogicVariable(AnalogicVariableDTO) returns (google.protobuf.Empty);
     rpc DeleteAnalogicVariable(DeleteRequest) returns (google.protobuf.Empty);
 
@@ -84,7 +87,6 @@ service AnalogicVariable {
 service DigitalVariable {
     rpc CreateDigitalVariable(CreateDigitalVariableRequest) returns (DigitalVariableDTO);
     rpc GetDigitalVariable(GetRequest) returns (NullableDigitalVariableDTO);
-    rpc GetAllDigitalVariables(google.protobuf.Empty) returns (DigitalVariables);
     rpc UpdateDigitalVariable(DigitalVariableDTO) returns (google.protobuf.Empty);
     rpc DeleteDigitalVariable(DeleteRequest) returns (google.protobuf.Empty);
 

@@ -23,7 +23,7 @@ service SlaveDeviceService {
 message SlaveDeviceDTO {
     string id = 1; // Identificador único del dispositivo
     IP ipAddress = 2; // Dirección IP del dispositivo
-    repeated Variable variables = 3; // Lista de variables asociadas al dispositivo
+     Variables variables = 3; // Lista de variables asociadas al dispositivo
 }
 
 
@@ -43,5 +43,5 @@ message NullableSlaveDeviceDTO {
 // Mensaje de solicitud para crear un SlaveDevice
 message CreateSlaveDeviceRequest {
       IP ipAddress = 1; // Dirección IP del dispositivo
-    repeated Variable variables = 2; // Variables asociadas al dispositivo
+     Variables variables = 2; // Variables asociadas al dispositivo
 }

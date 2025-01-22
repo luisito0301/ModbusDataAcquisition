@@ -25,22 +25,31 @@ namespace ModbusData.Application.Units.Commands.CreateUnit
             _unitOfWork = unitOfWork;
         }
 
-        public  Task<ModbusData.Domain.Entities.Unit.Unit> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
+        public Task<ModbusData.Domain.Entities.Unit.Unit> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
         {
-            // Create a new instance of Unit
-            ModbusData.Domain.Entities.Unit.Unit unit = new ModbusData.Domain.Entities.Unit.Unit(
-                Guid.NewGuid(), // Generate a new ID
+            // Crear una nueva instancia de Unit
+            var unit = new ModbusData.Domain.Entities.Unit.Unit(
+                Guid.NewGuid(), // Generar un nuevo ID
                 request.ManufactererName,
                 request.Code,
                 request.AreaName,
-                request._variables // Assuming Variables is a List<AnalogicVariable>
+                request.Type
             );
 
-            // Add the new Unit to the repository
-            _unitRepository.Add(unit);
-            _unitOfWork.SaveChanges(); // Save changes asynchronously
+            // Añadir las variables a la unidad
+            if (request._variables != null)
+            {
+                foreach (var variable in request._variables)
+                {
+                    unit.AddVariable(variable); // Asegúrate de que el método AddVariable esté implementado en la entidad Unit
+                }
+            }
 
-            return Task.FromResult(unit); // Return the created instance
+            // Añadir la nueva unidad al repositorio
+            _unitRepository.Add(unit);
+            _unitOfWork.SaveChanges(); // Guardar los cambios
+
+            return Task.FromResult(unit); // Devolver la instancia creada
         }
     }
 }

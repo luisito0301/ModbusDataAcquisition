@@ -24,17 +24,13 @@ message UnitDTO {
     string manufacterer_name = 2; // Nombre del fabricante
     string code = 3; // Código asociado a la unidad
     string area_name = 4; // Nombre del área donde se encuentra la unidad
-    repeated Variable variables = 5; // Lista de variables asociadas a la unidad
+     Variables variables = 5; // Lista de variables asociadas a la unidad
+     UnitType UnitTypes=6;
     
 }
 
 // Message for Variable (oneof)
-message Variable {
-    oneof variable {
-        AnalogicVariableDTO analogicVariable = 1;
-        DigitalVariableDTO digitalVariable = 2;
-    }
-}
+
 
 // Mensaje para una colección de Unidades
 message Units {
@@ -54,5 +50,6 @@ message CreateUnitRequest {
     string manufacterer_name = 1; // Nombre del fabricante
     string code = 2; // Código asociado a la unidad
     string area_name = 3; // Nombre del área donde se encuentran
-    repeated Variable variables = 4; // Variables asociadas a la unidad
+    Variables variables = 4; // Variables asociadas a la unidad
+       UnitType UnitTypes=5;
 }

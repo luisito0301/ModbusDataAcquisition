@@ -1,30 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using MediatR;
+using ModbusData.Domain.Entities.Variables; // Ajustar el espacio de nombres si es necesario
+using ModbusData.Contract; // Asumiendo que este es donde se define la interfaz del repositorio
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using ModbusData.Application.Abstract; // Assuming this is where your repository interface is defined
-using ModbusData.Domain.Entities.Variables; // Adjust the namespace as necessary
-using ModbusData.Contract; // Assuming this is where your repository interface is defined
-using ModbusData.Application.Variables.Queries.GetAllAnalogicVariable;
 using ModbusData.Contract.Variables;
+using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
 
-namespace ModbusData.Application.Variables.Queries.GetAllAnalogicVariable
+namespace ModbusData.Application.Variables.Queries.GetAnalogicVariable
 {
-    public class GetAllAnalogicVariableQueryHandler : IRequestHandler<GetAllAnalogicVariableQuery, List<AnalogicVariable>>
+    public class GetAllVariablesQueryHandler : IRequestHandler<GetAllVariablesQuery, List<Variable>>
     {
         private readonly IVariableRepository<AnalogicVariable> _analogicVariableRepository;
+        private readonly IVariableRepository<DigitalVariable> _digitalVariableRepository;
 
-        public GetAllAnalogicVariableQueryHandler(IVariableRepository<AnalogicVariable> analogicVariableRepository)
+        public GetAllVariablesQueryHandler(
+            IVariableRepository<AnalogicVariable> analogicVariableRepository,
+            IVariableRepository<DigitalVariable> digitalVariableRepository)
         {
             _analogicVariableRepository = analogicVariableRepository;
+            _digitalVariableRepository = digitalVariableRepository;
         }
 
-        public Task<List<AnalogicVariable>> Handle(GetAllAnalogicVariableQuery request, CancellationToken cancellationToken)
+        public Task<List<Variable>> Handle(GetAllVariablesQuery request, CancellationToken cancellationToken)
         {
-            // Retrieve all AnalogicVariables from the repository
-            var analogicVariables = _analogicVariableRepository.GetAll(); // Assuming you have a method to get all entities
+            var analogicVariables = _analogicVariableRepository.GetAll();
+            var digitalVariables = _digitalVariableRepository.GetAll();
 
-            return Task.FromResult(analogicVariables.ToList()); // Return the list of AnalogicVariables
+            var allVariables = new List<Variable>();
+            allVariables.AddRange(analogicVariables);
+            allVariables.AddRange(digitalVariables);
+
+            return Task.FromResult(allVariables);
         }
     }
 }
