@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ModbusNetwork\Commands\DeleteModbusNetwork\" />
-    <Folder Include="ModbusNetwork\Commands\UpdateModbusNetwork\" />
     <Folder Include="ModbusNetwork\Queries\" />
   </ItemGroup>
 
