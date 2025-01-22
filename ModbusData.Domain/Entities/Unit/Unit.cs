@@ -1,6 +1,6 @@
-﻿
-using ModbusData.Domain.Common;
+﻿using ModbusData.Domain.Common;
 using ModbusData.Domain.Entities.Variables;
+using ModbusData.Domain.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +11,14 @@ namespace ModbusData.Domain.Entities.Unit
 {
     public class Unit : Entity
     {
-        
+
         public string ManufactererName { get; set; } ///Nombre del fabricante
         public string Code { get; set; }  ///Codigo asociado a la unidad
         public string AreaName { get; set; } ///Nombre del area donde se encuentran
         private List<Variable> _variables = new List<Variable>(); ///Variables asociadas a la unidad
+        public UnitType UnitTypes { get; set; }
         public IReadOnlyCollection<Variable> Variables
-        { 
+        {
             get { return _variables; }
             protected set { _variables = value.ToList(); }
         }
@@ -30,14 +31,13 @@ namespace ModbusData.Domain.Entities.Unit
             _variables.Add(variable);
         }
         public void RemoveVariable(Variable variable)
-        {  _variables.Remove(variable); }
-        public Unit(Guid id, string manufactererName, string code, string areaName, List<Variable> variables): base(id)
+        { _variables.Remove(variable); }
+        public Unit(Guid id, string manufactererName, string code, string areaName, UnitType unitType) : base(id)
         {
-           
+            Id = id;
             ManufactererName = manufactererName;
-            Code = code;
-            AreaName = areaName;
-            _variables = variables;
+            Code = code; AreaName = areaName;
+            UnitTypes = unitType;
         }
         ///<summary>
         ///Requerido por EntityFramework

@@ -14,6 +14,7 @@ using ModbusData.DataAccess;
 using ModbusData.Domain.Entities.Variables;
 using ModbusData.DataAccess.Repositories.Units;
 using ModbusData.Contract.Units;
+using ModbusData.Domain.Types; // Importar el enum UnitType
 
 namespace ModbusData.DataAccess.Tests
 {
@@ -40,7 +41,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Continuous);
 
             // Act
             _unitRepository.Add(unit);
@@ -50,6 +51,7 @@ namespace ModbusData.DataAccess.Tests
             var result = _context.Set<Unit>().FirstOrDefault(u => u.Id == unitId);
             Assert.IsNotNull(result);
             Assert.AreEqual("Main Unit Manufacturer", result.ManufactererName);
+            Assert.AreEqual(UnitType.Continuous, result.UnitTypes);
         }
 
         [TestMethod]
@@ -57,7 +59,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Batch);
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges();
 
@@ -67,6 +69,7 @@ namespace ModbusData.DataAccess.Tests
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("Main Unit Manufacturer", result.ManufactererName);
+            Assert.AreEqual(UnitType.Batch, result.UnitTypes);
         }
 
         [TestMethod]
@@ -87,18 +90,19 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Storage);
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges();
 
             // Act
-            var updatedUnit = new Unit(unitId, "Updated Unit Manufacturer", "MU002", "Updated Factory", new List<Variable>());
+            var updatedUnit = new Unit(unitId, "Updated Unit Manufacturer", "MU002", "Updated Factory", UnitType.Discrete);
             _unitRepository.Update(updatedUnit);
             _unitOfWork.SaveChanges();
 
             // Assert
             var result = _context.Set<Unit>().Find(unitId);
             Assert.AreEqual("Updated Unit Manufacturer", result.ManufactererName);
+            Assert.AreEqual(UnitType.Discrete, result.UnitTypes);
         }
 
         [TestMethod]
@@ -106,7 +110,7 @@ namespace ModbusData.DataAccess.Tests
         {
             // Arrange
             var unitId = Guid.NewGuid();
-            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", new List<Variable>());
+            var unit = new Unit(unitId, "Main Unit Manufacturer", "MU001", "Factory Floor", UnitType.Continuous);
             _context.Set<Unit>().Add(unit);
             _unitOfWork.SaveChanges();
 
