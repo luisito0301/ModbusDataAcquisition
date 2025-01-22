@@ -14,12 +14,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.DataAccess\ModbusData.DataAccess.csproj" />
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+    <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ModbusNetwork\Commands\DeleteModbusNetwork\" />
-    <Folder Include="ModbusNetwork\Commands\UpdateModbusNetwork\" />
-    <Folder Include="ModbusNetwork\Queries\" />
     <Folder Include="SlaveDevice\" />
   </ItemGroup>
 

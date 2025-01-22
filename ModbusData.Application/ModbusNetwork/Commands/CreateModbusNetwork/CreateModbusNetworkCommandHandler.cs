@@ -27,7 +27,9 @@ namespace ModbusData.Application.ModbusNetwork.Commands.CreateModbusNetwork
         {
             // Crear una instancia de ModbusNetwork con la dirección IP del dispositivo maestro y la lista de dispositivos esclavos
             Domain.Entities.Modbus_Network.ModbusNetwork modbusNetwork = new Domain.Entities.Modbus_Network.ModbusNetwork(
-                request.MasterIpAddress
+                 Guid.NewGuid(),
+                request.MasterIpAddress,
+                request.Slaves
             );
 
             // Agregar la red Modbus a la base de datos
