@@ -1,0 +1,47 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "common.proto";
+
+// Definición del servicio para gestionar Samples
+service SampleService {
+    rpc CreateSample(CreateSampleRequest) returns (google.protobuf.Empty);
+    rpc GetSamplesByVariableId(GetSamplesByVariableIdRequest) returns (Samples);
+    rpc GetSamplesByDateRange(GetSamplesByDateRangeRequest) returns (Samples);
+}
+
+// DTO para Sample
+message SampleDTO {
+    string variableId = 1; // Identificador de la variable asociada
+    string date = 2; // Fecha de la muestra en formato ISO 8601
+    double value = 3; // Valor de la muestra
+}
+
+// Mensaje para una colección de Samples
+message Samples {
+    repeated SampleDTO items = 1; // Lista de SampleDTOs
+}
+
+// Mensaje de solicitud para obtener muestras por variableId
+message GetSamplesByVariableIdRequest {
+    string variableId = 1; // Identificador de la variable asociada
+}
+
+// Mensaje de solicitud para obtener muestras por rango de fechas
+message GetSamplesByDateRangeRequest {
+    string startDate = 1; // Fecha de inicio en formato ISO 8601
+    string endDate = 2; // Fecha de fin en formato ISO 8601
+}
+
+// Mensaje de solicitud para crear una muestra
+message CreateSampleRequest {
+    string variableId = 1; // Identificador de la variable asociada
+    string date = 2; // Fecha de la muestra en formato ISO 8601
+    double value = 3; // Valor de la muestra
+}

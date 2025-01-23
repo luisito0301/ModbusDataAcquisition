@@ -1,6 +1,6 @@
-﻿
-using ModbusData.Domain.Common;
+﻿using ModbusData.Domain.Common;
 using ModbusData.Domain.Entities.Variables;
+using ModbusData.Domain.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,27 +11,37 @@ namespace ModbusData.Domain.Entities.Unit
 {
     public class Unit : Entity
     {
-        public int Id { get; set; } //Identificador de la unidad
-        public string ManufactererName { get; set; } //Nombre del fabricante
-        public string Code { get; set; }  //Codigo asociado a la unidad
-        public string AreaName { get; set; } //Nombre del area donde se encuentran
-        public List<Variable> Variables { get; set; } = new List<Variable>(); //Variables asociadas a la unidad
 
-        // Método para agregar una variable a la unidad
+        public string ManufactererName { get; set; } ///Nombre del fabricante
+        public string Code { get; set; }  ///Codigo asociado a la unidad
+        public string AreaName { get; set; } ///Nombre del area donde se encuentran
+        private List<Variable> _variables = new List<Variable>(); ///Variables asociadas a la unidad
+        public UnitType UnitTypes { get; set; }
+        public IReadOnlyCollection<Variable> Variables
+        {
+            get { return _variables; }
+            protected set { _variables = value.ToList(); }
+        }
+        /// Método para agregar una variable a la unidad
         public void AddVariable(Variable variable)
         {
-            if (Variables.Any(v => v.Id == variable.Id))
+            if (_variables.Any(v => v.Id == variable.Id))
                 throw new InvalidOperationException("La variable ya está asociada a esta unidad.");
 
-            Variables.Add(variable);
+            _variables.Add(variable);
         }
-        public Unit(int id, string manufactererName, string code, string areaName, List<Variable> variables)
+        public void RemoveVariable(Variable variable)
+        { _variables.Remove(variable); }
+        public Unit(Guid id, string manufactererName, string code, string areaName, UnitType unitType) : base(id)
         {
             Id = id;
             ManufactererName = manufactererName;
-            Code = code;
-            AreaName = areaName;
-            Variables = variables;
+            Code = code; AreaName = areaName;
+            UnitTypes = unitType;
         }
+        ///<summary>
+        ///Requerido por EntityFramework
+        ///<summary>
+        protected Unit() { }
     }
 }
