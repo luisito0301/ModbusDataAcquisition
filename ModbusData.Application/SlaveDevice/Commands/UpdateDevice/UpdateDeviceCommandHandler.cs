@@ -28,7 +28,7 @@ namespace ModbusData.Application.SlaveDevice.Commands.UpdateSlaveDevice
 
         public Task<bool> Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
         {
-            // Find the existing Unit
+            // Find the existing Device
             var existingDevice = _deviceRepository.GetById(request.Id);
 
             if (existingDevice == null)
@@ -36,7 +36,7 @@ namespace ModbusData.Application.SlaveDevice.Commands.UpdateSlaveDevice
                 return Task.FromResult(false); // Return false if the Unit was not found
             }
 
-            // Create a new instance of Unit
+            // Create a new instance of Device
             
             var updatedDevice = new ModbusData.Domain.Entities.Device.SlaveDevice(
                 existingDevice.Id, // keep the ID
@@ -44,7 +44,7 @@ namespace ModbusData.Application.SlaveDevice.Commands.UpdateSlaveDevice
 
             );
 
-            // Add the new Unit to the repository
+            // Add the new Device to the repository
             _deviceRepository.Add(updatedDevice);
             _unitOfWork.SaveChanges(); // Save changes asynchronously
 
