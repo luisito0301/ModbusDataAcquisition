@@ -12,6 +12,5 @@ namespace ModbusData.Application.Variables.Commands.UpdateDigitalVariable
         string Code,
         TimeSpan SamplingPeriod,
         int ModbusAddress,
-        short Value,
         Guid UnitId) : ICommand<bool>;
 }

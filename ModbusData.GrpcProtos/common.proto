@@ -4,31 +4,34 @@ option csharp_namespace = "ModbusData.GrpcProtos";
 
 package GrpcProtos;
 
-message GetRequest
-{
-	string id = 1;
+// Mensaje para solicitudes de obtención por ID
+message GetRequest {
+    string id = 1;
 }
 
-message DeleteRequest
-{
-	string id = 1;
-}
-message IP
-{
-int32 octeto1=1;
-int32 octeto2=2;
-int32 octeto3=3;
-int32 octeto4=4;
+// Mensaje para solicitudes de eliminación por ID
+message DeleteRequest {
+    string id = 1;
 }
 
-enum VariableType{
-    Analogic=0;
-	Digital=1;
+// Mensaje para representar una dirección IP
+message IP {
+    int32 octeto1 = 1;
+    int32 octeto2 = 2;
+    int32 octeto3 = 3;
+    int32 octeto4 = 4;
 }
-enum UnitType{
 
-Continuous=0;
-        Discrete=1;
-        Batch=2;
-        Storage=3;
+// Enumeración para los tipos de variable
+enum VariableType {
+    Analogic = 0;
+    Digital = 1;
+}
+
+// Enumeración para los tipos de unidad
+enum UnitType {
+    Continuous = 0;
+    Discrete = 1;
+    Batch = 2;
+    Storage = 3;
 }

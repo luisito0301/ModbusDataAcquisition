@@ -8,7 +8,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 import "common.proto";
-import "analogicvariable.proto"; // Asegúrate de que este archivo existe y contiene la definición de Variable
+import "analogicvariable.proto"; // Asegúrate de que este archivo exista y contenga la definición de Variable
 
 // Definición del servicio para gestionar Unidades
 service Unit {

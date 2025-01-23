@@ -11,7 +11,6 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
             string Code,
             TimeSpan SamplingPeriod,
             int ModbusAddress,
-            double Value,
            Guid UnitId) : ICommand<AnalogicVariable>;
     }
 

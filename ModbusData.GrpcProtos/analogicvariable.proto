@@ -10,7 +10,7 @@ import "google/protobuf/struct.proto";
 import "common.proto"; 
 import "digitalvariable.proto";
 
-// Service definition for managing AnalogicVariables
+// Definición del servicio para gestionar AnalogicVariables
 service AnalogicVariable {
     rpc CreateAnalogicVariable(CreateAnalogicVariableRequest) returns (AnalogicVariableDTO);
     rpc GetAnalogicVariable(GetRequest) returns (NullableAnalogicVariableDTO);
@@ -19,45 +19,45 @@ service AnalogicVariable {
     rpc DeleteAnalogicVariable(DeleteRequest) returns (google.protobuf.Empty);
 }
 
-// DTO for AnalogicVariable
+// DTO para AnalogicVariable
 message AnalogicVariableDTO {
-    string id = 1; // Unique identifier
-    string name = 2; // Name of the variable
-    VariableType type = 3; // Type of the variable (Digital or Analogic)
-    bool isMeasurement = 4; // Is it a measurement?
-    string code = 5; // Code associated with the variable
-    string samplingPeriod = 6; // Sampling period as a string
-    int32 modbusAddress = 7; // Modbus address
-    double value = 8; // Value of the analog variable
-    string unitid=9;
+    string id = 1; // Identificador único
+    string name = 2; // Nombre de la variable
+    VariableType type = 3; // Tipo de la variable (Digital o Analógica)
+    bool isMeasurement = 4; // ¿Es una medición?
+    string code = 5; // Código asociado a la variable
+    string samplingPeriod = 6; // Periodo de muestreo como cadena
+    int32 modbusAddress = 7; // Dirección Modbus
+    string unitid = 8; // ID de la unidad
 }
 
-// Message for a collection of AnalogicVariables
+// Mensaje para una colección de AnalogicVariables
 message AnalogicVariables {
-    repeated AnalogicVariableDTO items = 1; // List of AnalogicVariableDTOs
+    repeated AnalogicVariableDTO items = 1; // Lista de AnalogicVariableDTOs
 }
 
-// Nullable DTO for AnalogicVariable
+// DTO Nullable para AnalogicVariable
 message NullableAnalogicVariableDTO {
     oneof kind {
-        google.protobuf.NullValue null = 1; // Represents a null value
-        AnalogicVariableDTO analogicVariable = 2; // The actual AnalogicVariableDTO
+        google.protobuf.NullValue null = 1; // Representa un valor nulo
+        AnalogicVariableDTO analogicVariable = 2; // El DTO actual de AnalogicVariable
     }
 }
 
-// Request message for creating an AnalogicVariable
+// Mensaje de solicitud para crear una AnalogicVariable
 message CreateAnalogicVariableRequest {
-    string name = 1; // Name of the variable
-    VariableType type = 2; // Type of the variable
-    bool isMeasurement = 3; // Is it a measurement?
-    string code = 4; // Code associated with the variable
-    string samplingPeriod = 5; // Sampling period as a string
-    int32 modbusAddress = 6; // Modbus address
-    double value = 7; // Value of the analog variable
-    string unitid=8;
+    string name = 1; // Nombre de la variable
+    VariableType type = 2; // Tipo de la variable
+    bool isMeasurement = 3; // ¿Es una medición?
+    string code = 4; // Código asociado a la variable
+    string samplingPeriod = 5; // Periodo de muestreo como cadena
+    int32 modbusAddress = 6; // Dirección Modbus
+    string unitid = 7; // ID de la unidad
 }
+
+// Definición del mensaje Variable que puede ser analógica o digital
 message Variable {
-    oneof kind{
+    oneof kind {
         AnalogicVariableDTO analogicvariable = 1;
         DigitalVariableDTO digitalvariable = 2; 
     } 

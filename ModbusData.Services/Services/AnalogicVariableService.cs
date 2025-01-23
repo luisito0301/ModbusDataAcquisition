@@ -5,7 +5,7 @@ using ModbusData.Application.Variables.Commands.UpdateAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAllAnalogicVariable;
 using ModbusData.Application.Variables.Queries.GetAnalogicVariable;
 using ModbusData.Domain.Types;
-using ModbusData.GrpcProtos;
+
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ModbusData.Domain.Entities.Variables;
 using ModbusData.Variables.Commands.DeleteAnalogicVariable;
-
+using ModbusData.GrpcProtos;
 
 namespace ModbusData.Services.Services
 {
@@ -41,7 +41,6 @@ namespace ModbusData.Services.Services
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
                 request.ModbusAddress,
-                request.Value,
                 Guid.Parse(request.Unitid)
             );
 
@@ -85,7 +84,7 @@ namespace ModbusData.Services.Services
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
                 request.ModbusAddress,
-                request.Value,
+  
                 Guid.Parse(request.Unitid)
             );
 

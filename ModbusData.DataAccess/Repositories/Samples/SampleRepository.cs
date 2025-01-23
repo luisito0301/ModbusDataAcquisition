@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using ModbusData.DataAccess.Contexts;
 using ModbusData.Domain.Records;
+using ModbusData.DataAccess.Contexts;
 
 namespace ModbusData.DataAccess.Repositories
 {
@@ -16,48 +16,22 @@ namespace ModbusData.DataAccess.Repositories
             _context = context;
         }
 
-        public IEnumerable<Sample> GetAllSamples()
-        {
-            return _context.Samples.ToList();
-        }
-
-        public Sample GetSample(DateTime date, Guid variableId)
+        // Implementación del método para obtener todas las muestras asociadas a una misma variable
+        public IEnumerable<Sample> GetSamplesByVariableId(Guid variableId)
         {
             return _context.Samples
-                .FirstOrDefault(s => s.Date == date && s.VariableId == variableId);
+                .Where(s => s.VariableId == variableId)
+                .ToList();
         }
 
+        // Implementación del método para agregar una nueva muestra
         public void AddSample(Sample sample)
         {
             _context.Samples.Add(sample);
             _context.SaveChanges();
         }
 
-        public void UpdateSample(Sample sample)
-        {
-            var existingSample = _context.Samples
-                .FirstOrDefault(s => s.Date == sample.Date && s.VariableId == sample.VariableId);
-
-            if (existingSample != null)
-            {
-                _context.Entry(existingSample).State = EntityState.Detached; // Desanexar la entidad original
-            }
-
-            _context.Samples.Update(sample);
-            _context.SaveChanges();
-        }
-
-
-        public void DeleteSample(DateTime fecha, Guid variableId)
-        {
-            var sample = GetSample(fecha, variableId);
-            if (sample != null)
-            {
-                _context.Samples.Remove(sample);
-                _context.SaveChanges();
-            }
-        }
-
+        // Implementación del método para obtener muestras en un rango de fechas
         public IEnumerable<Sample> GetSamplesByDateRange(DateTime startDate, DateTime endDate)
         {
             return _context.Samples

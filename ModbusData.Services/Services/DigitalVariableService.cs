@@ -40,7 +40,6 @@ namespace ModbusData.Services.Services
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
                 request.ModbusAddress,
-                (short)request.Value,
                 Guid.Parse(request.Unitid)
             );
 
@@ -84,7 +83,6 @@ namespace ModbusData.Services.Services
                 request.Code,
                 TimeSpan.Parse(request.SamplingPeriod),
                 request.ModbusAddress,
-                (short)request.Value,
                 Guid.Parse(request.Unitid)
             );
 

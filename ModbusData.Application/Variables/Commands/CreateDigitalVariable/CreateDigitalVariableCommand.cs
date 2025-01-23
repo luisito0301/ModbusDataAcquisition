@@ -11,6 +11,6 @@ namespace ModbusData.Application.Variables.Commands.CreateDigitalVariable
         string Code,
         TimeSpan SamplingPeriod,
         int ModbusAddress,
-        short Value,
+
        Guid UnitId) : ICommand<DigitalVariable>;
 }

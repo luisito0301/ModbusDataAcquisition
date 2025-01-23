@@ -9,7 +9,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 import "common.proto"; 
 
-// Service definition for managing DigitalVariables
+// Definición del servicio para gestionar DigitalVariables
 service DigitalVariable {
     rpc CreateDigitalVariable(CreateDigitalVariableRequest) returns (DigitalVariableDTO);
     rpc GetDigitalVariable(GetRequest) returns (NullableDigitalVariableDTO);
@@ -18,40 +18,38 @@ service DigitalVariable {
     rpc DeleteDigitalVariable(DeleteRequest) returns (google.protobuf.Empty);
 }
 
-// DTO for DigitalVariable
+// DTO para DigitalVariable
 message DigitalVariableDTO {
-    string id = 1; // Unique identifier
-    string name = 2; // Name of the variable
-    VariableType type = 3; // Type of the variable (Digital or Analogic)
-    bool isMeasurement = 4; // Is it a measurement?
-    string code = 5; // Code associated with the variable
-    string samplingPeriod = 6; // Sampling period as a string
-    int32 modbusAddress = 7; // Modbus address
-    int32 value = 8; // Value of the digital variable
-    string unitid=9;
+    string id = 1; // Identificador único
+    string name = 2; // Nombre de la variable
+    VariableType type = 3; // Tipo de la variable (Digital o Analógica)
+    bool isMeasurement = 4; // ¿Es una medición?
+    string code = 5; // Código asociado a la variable
+    string samplingPeriod = 6; // Periodo de muestreo como cadena
+    int32 modbusAddress = 7; // Dirección Modbus
+    string unitid = 8; // ID de la unidad
 }
 
-// Message for a collection of DigitalVariables
+// Mensaje para una colección de DigitalVariables
 message DigitalVariables {
-    repeated DigitalVariableDTO items = 1; // List of DigitalVariableDTOs
+    repeated DigitalVariableDTO items = 1; // Lista de DigitalVariableDTOs
 }
 
-// Nullable DTO for DigitalVariable
+// DTO Nullable para DigitalVariable
 message NullableDigitalVariableDTO {
     oneof kind {
-        google.protobuf.NullValue null = 1; // Represents a null value
-        DigitalVariableDTO digitalVariable = 2; // The actual digitalVariableDTO
+        google.protobuf.NullValue null = 1; // Representa un valor nulo
+        DigitalVariableDTO digitalVariable = 2; // El DTO actual de DigitalVariable
     }
 }
 
-// Request message for creating an DigitalVariable
+// Mensaje de solicitud para crear una DigitalVariable
 message CreateDigitalVariableRequest {
-    string name = 1; // Name of the variable
-    VariableType type = 2; // Type of the variable
-    bool isMeasurement = 3; // Is it a measurement?
-    string code = 4; // Code associated with the variable
-    string samplingPeriod = 5; // Sampling period as a string
-    int32 modbusAddress = 6; // Modbus address
-    int32 value = 7; // Value of the digital variable
-    string unitid=8;
+    string name = 1; // Nombre de la variable
+    VariableType type = 2; // Tipo de la variable
+    bool isMeasurement = 3; // ¿Es una medición?
+    string code = 4; // Código asociado a la variable
+    string samplingPeriod = 5; // Periodo de muestreo como cadena
+    int32 modbusAddress = 6; // Dirección Modbus
+    string unitid = 7; // ID de la unidad
 }

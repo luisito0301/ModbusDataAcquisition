@@ -1,15 +1,16 @@
-﻿syntax="proto3";
+﻿syntax = "proto3";
 
 option csharp_namespace = "ModbusData.GrpcProtos";
 
 package GrpcProtos;
+
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
-import "analogicvariable.proto"; // Asegúrate de que este archivo existe y contiene la definición de VariableDTO
+import "analogicvariable.proto"; // Asegúrate de que este archivo exista y contenga la definición de VariableDTO
 import "common.proto";
 import "unit.proto";
-import "slave.proto"; // Asegúrate de que este archivo existe y contiene la definición de SlaveDeviceDTO
+import "slave.proto"; // Asegúrate de que este archivo exista y contenga la definición de SlaveDeviceDTO
 
 // Definición del servicio para gestionar ModbusNetwork
 service ModbusNetworkService {
@@ -32,7 +33,7 @@ message ModbusNetworks {
     repeated ModbusNetworkDTO items = 1; // Lista de ModbusNetworkDTOs
 }
 
-// Nullable DTO para ModbusNetwork
+// DTO Nullable para ModbusNetwork
 message NullableModbusNetworkDTO {
     oneof kind {
         google.protobuf.NullValue null = 1; // Representa un valor nulo

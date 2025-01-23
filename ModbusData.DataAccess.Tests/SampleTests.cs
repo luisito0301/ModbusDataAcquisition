@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using ModbusData.Domain.Records;
 using ModbusData.DataAccess.Contexts;
 using ModbusData.DataAccess.Repositories;
-using ModbusData.Domain.Records;
 
 namespace ModbusData.DataAccess.Tests
 {
@@ -34,7 +35,7 @@ namespace ModbusData.DataAccess.Tests
 
         /// <summary>Prueba para verificar que Add agrega un sample.</summary>
         [TestMethod]
-        public void Add_ShouldAddSample()
+        public void AddSample_ShouldAddSample()
         {
             // Arrange
             var sample = new Sample
@@ -54,43 +55,22 @@ namespace ModbusData.DataAccess.Tests
             Assert.AreEqual(123.45, result.Value);
         }
 
-        /// <summary>Prueba para verificar que GetSample devuelve un sample.</summary>
+        /// <summary>Prueba para verificar que GetSamplesByVariableId devuelve las muestras correctas.</summary>
         [TestMethod]
-        public void GetSample_ShouldReturnSample()
+        public void GetSamplesByVariableId_ShouldReturnSamples()
         {
             // Arrange
-            var sample = new Sample
-            {
-                VariableId = Guid.NewGuid(),
-                Date = DateTime.Now,
-                Value = 123.45
-            };
-            _context.Samples.Add(sample);
-            _context.SaveChanges();
-
-            // Act
-            var result = _sampleRepository.GetSample(sample.Date, sample.VariableId);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(123.45, result.Value);
-        }
-
-        /// <summary>Prueba para verificar que GetAll devuelve todos los samples.</summary>
-        [TestMethod]
-        public void GetAll_ShouldReturnAllSamples()
-        {
-            // Arrange
+            var variableId = Guid.NewGuid();
             var sample1 = new Sample
             {
-                VariableId = Guid.NewGuid(),
+                VariableId = variableId,
                 Date = DateTime.Now,
                 Value = 123.45
             };
             var sample2 = new Sample
             {
-                VariableId = Guid.NewGuid(),
-                Date = DateTime.Now.AddMinutes(-5),
+                VariableId = variableId,
+                Date = DateTime.Now.AddHours(1),
                 Value = 678.90
             };
 
@@ -98,65 +78,15 @@ namespace ModbusData.DataAccess.Tests
             _context.SaveChanges();
 
             // Act
-            var result = _sampleRepository.GetAllSamples().ToList();
+            var result = _sampleRepository.GetSamplesByVariableId(variableId).ToList();
 
             // Assert
             Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(s => s.Value == 123.45));
+            Assert.IsTrue(result.Any(s => s.Value == 678.90));
         }
 
-        /// <summary>Prueba para verificar que Update modifica un sample.</summary>
-        [TestMethod]
-        public void Update_ShouldModifySample()
-        {
-            // Arrange
-            var sample = new Sample
-            {
-                VariableId = Guid.NewGuid(),
-                Date = DateTime.Now,
-                Value = 123.45
-            };
-            _context.Samples.Add(sample);
-            _context.SaveChanges();
-
-            // Act
-            var updatedSample = new Sample
-            {
-                VariableId = sample.VariableId,
-                Date = sample.Date,
-                Value = 543.21
-            };
-            _sampleRepository.UpdateSample(updatedSample);
-            _context.SaveChanges();
-
-            // Assert
-            var result = _context.Samples.FirstOrDefault(s => s.VariableId == sample.VariableId && s.Date == sample.Date);
-            Assert.AreEqual(543.21, result.Value);
-        }
-
-        /// <summary>Prueba para verificar que Delete elimina un sample.</summary>
-        [TestMethod]
-        public void Delete_ShouldRemoveSample()
-        {
-            // Arrange
-            var sample = new Sample
-            {
-                VariableId = Guid.NewGuid(),
-                Date = DateTime.Now,
-                Value = 123.45
-            };
-            _context.Samples.Add(sample);
-            _context.SaveChanges();
-
-            // Act
-            _sampleRepository.DeleteSample(sample.Date, sample.VariableId);
-            _context.SaveChanges();
-
-            // Assert
-            var result = _context.Samples.FirstOrDefault(s => s.VariableId == sample.VariableId && s.Date == sample.Date);
-            Assert.IsNull(result);
-        }
-
-        /// <summary>Prueba para verificar que GetSamplesByDateRange devuelve los samples en el rango de fechas.</summary>
+        /// <summary>Prueba para verificar que GetSamplesByDateRange devuelve las muestras en el rango de fechas.</summary>
         [TestMethod]
         public void GetSamplesByDateRange_ShouldReturnSamples()
         {
@@ -182,6 +112,8 @@ namespace ModbusData.DataAccess.Tests
 
             // Assert
             Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(s => s.Value == 123.45));
+            Assert.IsTrue(result.Any(s => s.Value == 678.90));
         }
     }
 }

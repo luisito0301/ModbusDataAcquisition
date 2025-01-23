@@ -27,13 +27,12 @@ message SlaveDeviceDTO {
     repeated Variable variables = 3; // Lista de variables asociadas al dispositivo
 }
 
-
 // Mensaje para una colección de SlaveDevices
 message SlaveDevices {
     repeated SlaveDeviceDTO items = 1; // Lista de SlaveDeviceDTOs
 }
 
-// Nullable DTO para SlaveDevice
+// DTO Nullable para SlaveDevice
 message NullableSlaveDeviceDTO {
     oneof kind {
         google.protobuf.NullValue null = 1; // Representa un valor nulo
@@ -43,6 +42,6 @@ message NullableSlaveDeviceDTO {
 
 // Mensaje de solicitud para crear un SlaveDevice
 message CreateSlaveDeviceRequest {
-      IP ipAddress = 1; // Dirección IP del dispositivo
+    IP ipAddress = 1; // Dirección IP del dispositivo
     repeated Variable variables = 2; // Variables asociadas al dispositivo
 }

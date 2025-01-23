@@ -69,7 +69,6 @@ namespace ModbusData.ConsoleApp
                 Code = "TV001",
                 SamplingPeriod = "00:00:01", // Example TimeSpan
                 ModbusAddress = 123,
-                Value = 10.0,
                 Unitid = createUnitResponse.Id // Asignar el ID de la unidad creada
             });
 
@@ -95,7 +94,7 @@ namespace ModbusData.ConsoleApp
                 Code = "TV002",
                 SamplingPeriod = "00:00:01", // Example TimeSpan
                 ModbusAddress = 123,
-                Value = 10,
+                
                 Unitid = createUnitResponse.Id // Asignar el ID de la unidad creada
             });
 

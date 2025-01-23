@@ -42,7 +42,6 @@ namespace ModbusData.Application.Variables.Commands.UpdateDigitalVariable
                 request.SamplingPeriod,
                 request.ModbusAddress)
             {
-                Value = request.Value,
                 UnitId = request.UnitId
             };
 

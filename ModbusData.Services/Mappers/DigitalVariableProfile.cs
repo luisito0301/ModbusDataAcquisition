@@ -7,6 +7,7 @@ namespace ModbusData.Services.Mappers
     {
         public DigitalVariableProfile()
         {
+            
             // Mapping from Domain Entity to gRPC DTO
             CreateMap<ModbusData.Domain.Entities.Variables.DigitalVariable, DigitalVariableDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
@@ -16,7 +17,7 @@ namespace ModbusData.Services.Mappers
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.SamplingPeriod, opt => opt.MapFrom(src => src.SamplingPeriod.ToString())) // Convert TimeSpan to string
                 .ForMember(dest => dest.ModbusAddress, opt => opt.MapFrom(src => src.ModbusAddress))
-                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
+                
                 .ForMember(dest => dest.Unitid, opt => opt.MapFrom(src => src.UnitId.ToString()));
 
             // Mapping from gRPC DTO to Domain Entity
@@ -28,7 +29,6 @@ namespace ModbusData.Services.Mappers
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.SamplingPeriod, opt => opt.MapFrom(src => TimeSpan.Parse(src.SamplingPeriod))) // Convert string to TimeSpan
                 .ForMember(dest => dest.ModbusAddress, opt => opt.MapFrom(src => src.ModbusAddress))
-                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
                 .ForMember(dest => dest.UnitId, opt => opt.MapFrom(src => Guid.Parse(src.Unitid)));
         }
     }

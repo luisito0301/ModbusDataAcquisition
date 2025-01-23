@@ -6,11 +6,13 @@ namespace ModbusData.DataAccess.Repositories
 {
     public interface ISampleRepository
     {
-        IEnumerable<Sample> GetAllSamples();
-        Sample GetSample(DateTime fecha, Guid variableId);
+        // Método para obtener todas las muestras asociadas a una misma variable
+        IEnumerable<Sample> GetSamplesByVariableId(Guid variableId);
+
+        // Método para agregar una nueva muestra
         void AddSample(Sample sample);
-        void UpdateSample(Sample sample);
-        void DeleteSample(DateTime fecha, Guid variableId);
-        IEnumerable<Sample> GetSamplesByDateRange(DateTime startDate, DateTime endDate); // Nuevo método
+
+        // Método para obtener muestras en un rango de fechas
+        IEnumerable<Sample> GetSamplesByDateRange(DateTime startDate, DateTime endDate);
     }
 }

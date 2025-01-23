@@ -39,7 +39,7 @@ namespace ModbusData.Application.Variables.Commands.CreateAnalogicVariable
                     request.SamplingPeriod,
                     request.ModbusAddress)
                 {
-                    Value = request.Value,
+                    
                     UnitId = request.UnitId
                 };
 
