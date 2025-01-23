@@ -23,6 +23,9 @@
 	<ItemGroup>
 		<Protobuf Include="*.proto" GrpcServices=" Both" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Protobuf Remove="sample.proto" />
+	</ItemGroup>
 	
 
 </Project>

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "common.proto";
+
+//definicion del servicio para implementar en samples
+
+service sample{
+	rpc CreateSample(CreateSampleRequest)returns(SampleDTO);
+	rpc GetSample(GetRequest) returns (NullableSampleDTO);
+    rpc GetAllSamples(google.protobuf.Empty) returns (Samples);
+    rpc DeleteSample(Delet eSampleRequest)returns(google.protobuf.Empty);
+
+}
+
+// Mensaje que representa una muestra
+message SampleDTO {
+    string variable_id = 1; // Identificador de la variable asociada (convertido a string)
+    google.protobuf.Timestamp date = 2; // Fecha en que se tomó la muestra
+    double value = 3; // Valor de la muestra
+}
+
+
+message GetSampleRequest {
+    string variable_id = 1; // Identificador de la variable asociada a la muestra
+}
+
+// Mensaje de respuesta que contiene una lista de Samples
+message Samples {
+    repeated SampleDTO items = 1; // Lista de SampleDTOs
+}
+
+// Mensaje de solicitud para eliminar un Sample
+message DeleteSampleRequest {
+    string variable_id = 1; // Identificador de la variable asociada a la muestra que se desea eliminar
+}
