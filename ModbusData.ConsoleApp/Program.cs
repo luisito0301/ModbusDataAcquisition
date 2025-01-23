@@ -1,8 +1,10 @@
-﻿using ModbusData.GrpcProtos; // Asegúrate de tener el namespace correcto para tus gRPC Protos
+﻿using System;
+using System.Threading.Tasks;
 using Grpc.Net.Client;
-using System;
+using ModbusData.GrpcProtos;
+using System.Collections.Generic;
 
-namespace ModbusData.ModbusNetworkConsole
+namespace SampleConsoleApp
 {
     internal class Program
     {
@@ -11,7 +13,7 @@ namespace ModbusData.ModbusNetworkConsole
             Console.WriteLine("Presione una tecla para conectar");
             Console.ReadKey();
 
-            Console.WriteLine("Creating channel and client");
+            Console.WriteLine("Creando canal y cliente");
 
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback =
@@ -27,6 +29,74 @@ namespace ModbusData.ModbusNetworkConsole
                 return;
             }
 
+            var sampleClient = new SampleService.SampleServiceClient(channel);
+
+            // Crear múltiples muestras con diferentes fechas
+            Console.WriteLine("Presione una tecla para crear múltiples muestras");
+            Console.ReadKey();
+
+            var variableId = Guid.NewGuid().ToString();
+            var dates = new List<DateTime>
+            {
+                DateTime.UtcNow.AddDays(-10),
+                DateTime.UtcNow.AddDays(-9),
+                DateTime.UtcNow.AddDays(-8),
+                DateTime.UtcNow.AddDays(-7),
+                DateTime.UtcNow.AddDays(-6), // Muestras fuera del rango de fechas
+                DateTime.UtcNow.AddDays(-3),
+                DateTime.UtcNow.AddDays(-2),
+                DateTime.UtcNow.AddDays(-1),
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddDays(1) // Muestra futura
+            };
+
+            foreach (var date in dates)
+            {
+                var createSampleRequest = new CreateSampleRequest
+                {
+                    VariableId = variableId,
+                    Date = date.ToString("o"),
+                    Value = new Random().NextDouble() * 100
+                };
+
+                sampleClient.CreateSample(createSampleRequest);
+                Console.WriteLine($"Muestra creada para la fecha: {date}");
+            }
+
+            // Obtener muestras por VariableId
+            Console.WriteLine("Presione una tecla para obtener muestras por VariableId");
+            Console.ReadKey();
+
+            var getSamplesByVariableIdRequest = new GetSamplesByVariableIdRequest
+            {
+                VariableId = variableId
+            };
+
+            var samplesByVariableId = sampleClient.GetSamplesByVariableId(getSamplesByVariableIdRequest);
+
+            Console.WriteLine("Muestras obtenidas por VariableId:");
+            foreach (var sample in samplesByVariableId.Items)
+            {
+                Console.WriteLine($"VariableId: {sample.VariableId}, Date: {sample.Date}, Value: {sample.Value}");
+            }
+
+            // Obtener muestras por rango de fechas
+            Console.WriteLine("Presione una tecla para obtener muestras por rango de fechas");
+            Console.ReadKey();
+
+            var getSamplesByDateRangeRequest = new GetSamplesByDateRangeRequest
+            {
+                StartDate = DateTime.UtcNow.AddDays(-5).ToString("o"), // Rango de fechas
+                EndDate = DateTime.UtcNow.AddDays(1).ToString("o")
+            };
+
+            var samplesByDateRange = sampleClient.GetSamplesByDateRange(getSamplesByDateRangeRequest);
+
+            Console.WriteLine("Muestras obtenidas por rango de fechas:");
+            foreach (var sample in samplesByDateRange.Items)
+            {
+                Console.WriteLine($"VariableId: {sample.VariableId}, Date: {sample.Date}, Value: {sample.Value}");
+            }
             var modbusNetworkClient = new ModbusNetworkService.ModbusNetworkServiceClient(channel);
 
             // Crear una red Modbus
@@ -36,7 +106,7 @@ namespace ModbusData.ModbusNetworkConsole
             var createModbusNetworkRequest = new CreateModbusNetworkRequest
             {
                 MasterIpAddress = "192.168.1.100", // Ejemplo de IP
-                Slaves = {  } // Ejemplo de dispositivos esclavos, puedes reemplazar estos ID con los correctos
+                Slaves = { } // Ejemplo de dispositivos esclavos, puedes reemplazar estos ID con los correctos
             };
 
             var createModbusNetworkResponse = modbusNetworkClient.CreateModbusNetwork(createModbusNetworkRequest);
@@ -78,7 +148,7 @@ namespace ModbusData.ModbusNetworkConsole
             {
                 Id = createModbusNetworkResponse.Id,
                 MasterIpAddress = "192.168.1.101", // Actualización del IP
-                Slaves = {  } // Ejemplo de actualización de dispositivos esclavos
+                Slaves = { } // Ejemplo de actualización de dispositivos esclavos
             });
 
             if (updateModbusNetworkResponse == null)
@@ -405,9 +475,8 @@ namespace ModbusData.ModbusNetworkConsole
                 Console.WriteLine("Dispositivo esclavo eliminado exitosamente");
             }
 
-
             channel.Dispose();
-            Console.WriteLine("Pruebas CRUD  finalizadas.");
+            Console.WriteLine("Pruebas CRUD en cliente finalizadas.");
         }
     }
 }

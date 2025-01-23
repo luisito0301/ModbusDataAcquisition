@@ -6,7 +6,7 @@ using ModbusData.DataAccess;
 using ModbusData.DataAccess.Contexts;
 using ModbusData.DataAccess.Repositories.Units;
 using ModbusData.DataAccess.Repositories.Variables;
-using ModbusData.DataAccess.Repositories.Devices; // Añadido
+using ModbusData.DataAccess.Repositories.Devices; 
 using ModbusData.GrpcProtos;
 using ModbusData.Services.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +15,7 @@ using MediatR;
 using System.Reflection;
 using ModbusData.Contract.Devices;
 using ModbusData.Contract.ModbusNetworks;
+using ModbusData.DataAccess.Repositories;
 using ModbusData.DataAccess.Repositories.ModbusNetworks;
 
 namespace ModbusData.Services
@@ -33,6 +34,7 @@ namespace ModbusData.Services
             builder.Services.AddScoped(typeof(IUnitRepository<>), typeof(UnitRepository<>));
             builder.Services.AddScoped(typeof(IDeviceRepository<>), typeof(DeviceRepository<>)); // Registramos el repositorio de SlaveDevice
             builder.Services.AddScoped(typeof(IModbusNetworkRepository<>), typeof(ModbusNetworkRepository<>)); // Registramos el repositorio de ModbusNetwork
+            builder.Services.AddScoped(typeof(ISampleRepository), typeof(SampleRepository)); // Registramos el repositorio de Sample
             builder.Services.AddGrpc();
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddMediatR(new MediatRServiceConfiguration()
@@ -52,6 +54,7 @@ namespace ModbusData.Services
             app.MapGrpcService<UnitService>();
             app.MapGrpcService<Services.SlaveDeviceService>(); // Mapeo del servicio SlaveDeviceService
             app.MapGrpcService<Services.ModbusNetworkService>(); // Mapeo del servicio ModbusNetworkService
+            app.MapGrpcService<Services.SampleService>(); // Mapeo del servicio SampleService
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
