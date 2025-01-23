@@ -34,7 +34,7 @@ namespace ModbusData.Services.Services
         public override Task<ModbusNetworkDTO> CreateModbusNetwork(CreateModbusNetworkRequest request, ServerCallContext context)
         {
             var command = new CreateModbusNetworkCommand(
-                request.MasterIpAddress.ToString().ToIp(), // Utilizamos el método de extensión ToIp
+              ModbusData.Domain.ValueObjects.IP.Parse(request.MasterIpAddress),  // Utilizamos el método de extensión ToIp
                 request.Slaves.Select(s => _mapper.Map<ModbusData.Domain.Entities.Device.SlaveDevice>(s)).ToList()
             );
 
@@ -72,7 +72,7 @@ namespace ModbusData.Services.Services
         {
             var command = new UpdateModbusNetworkCommand(
                 Guid.Parse(request.Id),
-                request.MasterIpAddress.ToString().ToIp(), // Utilizamos el método de extensión ToIp
+                 ModbusData.Domain.ValueObjects.IP.Parse(request.MasterIpAddress),  // Utilizamos el método de extensión ToIp
                 request.Slaves.Select(s => _mapper.Map<ModbusData.Domain.Entities.Device.SlaveDevice>(s)).ToList()
             );
 

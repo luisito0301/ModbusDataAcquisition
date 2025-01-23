@@ -1,6 +1,7 @@
 ﻿using ModbusData.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace ModbusData.Domain.ValueObjects
 {
@@ -59,6 +60,18 @@ namespace ModbusData.Domain.ValueObjects
             catch (ArgumentOutOfRangeException)
             {
                 throw new ArgumentOutOfRangeException("Octet values must be between 0 and 255.");
+            }
+        }
+
+        public static IP FromJson(string json)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<IP>(json);
+            }
+            catch (JsonException)
+            {
+                throw new FormatException("Invalid IP address JSON format.");
             }
         }
 

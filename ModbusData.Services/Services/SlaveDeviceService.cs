@@ -13,8 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ModbusData.Application.SlaveDevice.Queries.GetDevice;
 using ModbusData.Application.SlaveDevice.Queries.GetAllDevice;
-using ModbusData.Application.SlaveDevice.Commands.UpdateDevice;
 using ModbusData.SlaveDevice.Commands.DeleteDevice;
+using ModbusData.Application.SlaveDevice.Commands.UpdateDevice;
 
 namespace ModbusData.Services.Services
 {
@@ -31,62 +31,100 @@ namespace ModbusData.Services.Services
             _logger = logger;
         }
 
-        public override Task<SlaveDeviceDTO> CreateSlaveDevice(CreateSlaveDeviceRequest request, ServerCallContext context)
+        public override async Task<SlaveDeviceDTO> CreateSlaveDevice(CreateSlaveDeviceRequest request, ServerCallContext context)
         {
-            var command = new CreateDeviceCommand(
-                request.IpAddress.ToString().ToIp(), // Utilizamos el método de extensión ToIp
-                request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList()
-            );
-
-            var result = _mediator.Send(command).Result; // Llamada síncrona
-            return Task.FromResult(_mapper.Map<SlaveDeviceDTO>(result));
-        }
-
-        public override Task<NullableSlaveDeviceDTO> GetSlaveDevice(GetRequest request, ServerCallContext context)
-        {
-            var query = new GetDeviceByIdQuery(Guid.Parse(request.Id));
-            var result = _mediator.Send(query).Result; // Llamada síncrona
-
-            if (result is null)
+            try
             {
-                _logger.LogWarning("SlaveDevice not found for ID: {SlaveDeviceId}", request.Id);
-                return Task.FromResult(new NullableSlaveDeviceDTO { Null = NullValue.NullValue });
+                var command = new CreateDeviceCommand(
+                    IP.Parse(request.IpAddress), // Utilizamos el método Parse
+                    request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList()
+                );
+
+                var result = await _mediator.Send(command);
+                return _mapper.Map<SlaveDeviceDTO>(result);
             }
-
-            _logger.LogInformation("SlaveDevice found for ID: {SlaveDeviceId}", request.Id);
-            return Task.FromResult(new NullableSlaveDeviceDTO { SlaveDevice = _mapper.Map<SlaveDeviceDTO>(result) });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating slave device");
+                throw new RpcException(new Status(StatusCode.Unknown, "An error occurred while creating the slave device"));
+            }
         }
 
-        public override Task<SlaveDevices> GetAllSlaveDevices(Empty request, ServerCallContext context)
+        public override async Task<NullableSlaveDeviceDTO> GetSlaveDevice(GetRequest request, ServerCallContext context)
         {
-            var query = new GetAllDeviceQuery();
-            var result = _mediator.Send(query).Result; // Llamada síncrona
+            try
+            {
+                var query = new GetDeviceByIdQuery(Guid.Parse(request.Id));
+                var result = await _mediator.Send(query);
 
-            var slaveDeviceDTOs = new SlaveDevices();
-            slaveDeviceDTOs.Items.AddRange(result.Select(m => _mapper.Map<SlaveDeviceDTO>(m)));
+                if (result is null)
+                {
+                    _logger.LogWarning("SlaveDevice not found for ID: {SlaveDeviceId}", request.Id);
+                    return new NullableSlaveDeviceDTO { Null = NullValue.NullValue };
+                }
 
-            return Task.FromResult(slaveDeviceDTOs);
+                _logger.LogInformation("SlaveDevice found for ID: {SlaveDeviceId}", request.Id);
+                return new NullableSlaveDeviceDTO { SlaveDevice = _mapper.Map<SlaveDeviceDTO>(result) };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting slave device");
+                throw new RpcException(new Status(StatusCode.Unknown, "An error occurred while getting the slave device"));
+            }
         }
 
-        public override Task<Empty> UpdateSlaveDevice(SlaveDeviceDTO request, ServerCallContext context)
+        public override async Task<SlaveDevices> GetAllSlaveDevices(Empty request, ServerCallContext context)
         {
-            var command = new UpdateDeviceCommand(
-                Guid.Parse(request.Id),
-                request.IpAddress.ToString().ToIp(), // Utilizamos el método de extensión ToIp
-                request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList()
-            );
+            try
+            {
+                var query = new GetAllDeviceQuery();
+                var result = await _mediator.Send(query);
 
-            _mediator.Send(command).Wait(); // Llamada síncrona
-            return Task.FromResult(new Empty());
+                var slaveDeviceDTOs = new SlaveDevices();
+                slaveDeviceDTOs.Items.AddRange(result.Select(m => _mapper.Map<SlaveDeviceDTO>(m)));
+
+                return slaveDeviceDTOs;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting all slave devices");
+                throw new RpcException(new Status(StatusCode.Unknown, "An error occurred while getting all slave devices"));
+            }
         }
 
-        public override Task<Empty> DeleteSlaveDevice(DeleteRequest request, ServerCallContext context)
+        public override async Task<Empty> UpdateSlaveDevice(SlaveDeviceDTO request, ServerCallContext context)
         {
-            var command = new DeleteDeviceCommand(Guid.Parse(request.Id));
-            _mediator.Send(command).Wait(); // Llamada síncrona
-            return Task.FromResult(new Empty());
+            try
+            {
+                var command = new UpdateDeviceCommand(
+                    Guid.Parse(request.Id),
+                    IP.Parse(request.IpAddress), // Utilizamos el método Parse
+                    request.Variables.Select(v => _mapper.Map<ModbusData.Domain.Entities.Variables.Variable>(v)).ToList()
+                );
+
+                await _mediator.Send(command);
+                return new Empty();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating slave device");
+                throw new RpcException(new Status(StatusCode.Unknown, "An error occurred while updating the slave device"));
+            }
+        }
+
+        public override async Task<Empty> DeleteSlaveDevice(DeleteRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var command = new DeleteDeviceCommand(Guid.Parse(request.Id));
+                await _mediator.Send(command);
+                return new Empty();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting slave device");
+                throw new RpcException(new Status(StatusCode.Unknown, "An error occurred while deleting the slave device"));
+            }
         }
     }
-
-    
 }

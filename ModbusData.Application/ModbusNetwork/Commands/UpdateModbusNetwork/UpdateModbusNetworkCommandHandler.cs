@@ -7,15 +7,14 @@ using ModbusData.Application.ModbusNetwork.Commands.UpdateModbusNetwork;
 using ModbusData.Contract;
 using ModbusData.Contract.ModbusNetworks;
 using ModbusData.DataAccess.Repositories.Common;
-using ModbusData.Domain.Entities.Device;
+using ModbusData.Domain.Entities.Modbus_Network;
 using ModbusData.Domain.Entities.Variables;
-
 
 namespace ModbusData.Application.ModbusNetwork.Commands.UpdateModbusNetworks
 {
     public class UpdateModbusNetworkCommandHandler : ICommandHandler<UpdateModbusNetworkCommand, bool>
     {
-        private readonly IModbusNetworkRepository<Domain.Entities.Modbus_Network.ModbusNetwork> _modbusNetworkRepository; // Asegúrate de tener un repositorio para Unit
+        private readonly IModbusNetworkRepository<ModbusData.Domain.Entities.Modbus_Network.ModbusNetwork> _modbusNetworkRepository; // Asegúrate de tener un repositorio para ModbusNetwork
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdateModbusNetworkCommandHandler(
@@ -33,20 +32,16 @@ namespace ModbusData.Application.ModbusNetwork.Commands.UpdateModbusNetworks
 
             if (existingModbusNetwork == null)
             {
-                return Task.FromResult(false); // Return false if the Unit was not found
+                return Task.FromResult(false); // Return false if the ModbusNetwork was not found
             }
 
-            // Create a new instance of ModbusNetwork
+            // Update the existing ModbusNetwork with new values
+            existingModbusNetwork.MasterIpAddress = request.MasterIpAddress;
+            existingModbusNetwork.Slaves = request.Slaves;
 
-            var updatedModbusNetwork = new ModbusData.Domain.Entities.Modbus_Network.ModbusNetwork(
-                existingModbusNetwork.Id, // keep the ID
-                request.MasterIpAddress,
-                request.Slaves
-            );
-
-            // Add the new ModbusNetwork to the repository
-            _modbusNetworkRepository.Add(updatedModbusNetwork);
-            _unitOfWork.SaveChanges(); // Save changes asynchronously
+            // Update the ModbusNetwork in the repository
+            _modbusNetworkRepository.Update(existingModbusNetwork);
+            _unitOfWork.SaveChanges(); // Save changes
 
             return Task.FromResult(true); // Return true if the update was successful
         }

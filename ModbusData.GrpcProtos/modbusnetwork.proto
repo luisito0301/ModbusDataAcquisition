@@ -24,7 +24,7 @@ service ModbusNetworkService {
 // DTO para ModbusNetwork
 message ModbusNetworkDTO {
     string id = 1; // Identificador único de la red
-    IP masterIpAddress = 2; // Dirección IP del dispositivo maestro
+    string masterIpAddress = 2; // Dirección IP del dispositivo maestro
     repeated SlaveDeviceDTO slaves = 3; // Lista de dispositivos esclavos asociados a la red
 }
 

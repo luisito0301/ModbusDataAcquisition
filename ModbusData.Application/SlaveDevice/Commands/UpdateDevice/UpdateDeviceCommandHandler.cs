@@ -10,12 +10,11 @@ using ModbusData.DataAccess.Repositories.Common;
 using ModbusData.Domain.Entities.Device;
 using ModbusData.Domain.Entities.Variables;
 
-
 namespace ModbusData.Application.SlaveDevice.Commands.UpdateSlaveDevice
 {
     public class UpdateDeviceCommandHandler : ICommandHandler<UpdateDeviceCommand, bool>
     {
-        private readonly IDeviceRepository<ModbusData.Domain.Entities.Device.SlaveDevice> _deviceRepository; // Asegúrate de tener un repositorio para Unit
+        private readonly IDeviceRepository<ModbusData.Domain.Entities.Device.SlaveDevice> _deviceRepository; // Asegúrate de tener un repositorio para SlaveDevice
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdateDeviceCommandHandler(
@@ -28,26 +27,21 @@ namespace ModbusData.Application.SlaveDevice.Commands.UpdateSlaveDevice
 
         public Task<bool> Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
         {
-            // Find the existing Unit
+            // Find the existing SlaveDevice
             var existingDevice = _deviceRepository.GetById(request.Id);
 
             if (existingDevice == null)
             {
-                return Task.FromResult(false); // Return false if the Unit was not found
+                return Task.FromResult(false); // Return false if the SlaveDevice was not found
             }
 
-            // Create a new instance of Unit
+            // Update the existing SlaveDevice with new values
+            existingDevice.IpAddress = request.IpAddress;
+            existingDevice.Variables = request.variables;
 
-            var updatedDevice = new ModbusData.Domain.Entities.Device.SlaveDevice(
-                existingDevice.Id, // keep the ID
-                request.IpAddress,
-                request.variables
-
-            );
-
-            // Add the new Unit to the repository
-            _deviceRepository.Add(updatedDevice);
-            _unitOfWork.SaveChanges(); // Save changes asynchronously
+            // Update the SlaveDevice in the repository
+            _deviceRepository.Update(existingDevice);
+            _unitOfWork.SaveChanges(); // Save changes
 
             return Task.FromResult(true); // Return true if the update was successful
         }

@@ -15,12 +15,6 @@ message DeleteRequest {
 }
 
 // Mensaje para representar una dirección IP
-message IP {
-    int32 octeto1 = 1;
-    int32 octeto2 = 2;
-    int32 octeto3 = 3;
-    int32 octeto4 = 4;
-}
 
 // Enumeración para los tipos de variable
 enum VariableType {

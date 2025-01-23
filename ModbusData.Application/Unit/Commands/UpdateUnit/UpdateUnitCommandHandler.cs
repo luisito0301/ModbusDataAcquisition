@@ -10,7 +10,6 @@ using ModbusData.DataAccess.Repositories.Common;
 using ModbusData.Domain.Entities.Unit; // Asegúrate de que la ruta sea correcta
 using ModbusData.Domain.Entities.Variables;
 
-
 namespace ModbusData.Application.Units.Commands.UpdateUnit
 {
     public class UpdateUnitCommandHandler : ICommandHandler<UpdateUnitCommand, bool>
@@ -36,19 +35,15 @@ namespace ModbusData.Application.Units.Commands.UpdateUnit
                 return Task.FromResult(false); // Return false if the Unit was not found
             }
 
-            // Create a new instance of Unit
-            var updatedUnit = new ModbusData.Domain.Entities.Unit.Unit(
-                existingUnit.Id, // keep the ID
-                request.ManufactererName,
-                request.Code,
-                request.AreaName,
-                request.Type
+            // Update the existing Unit with new values
+            existingUnit.ManufactererName = request.ManufactererName;
+            existingUnit.Code = request.Code;
+            existingUnit.AreaName = request.AreaName;
+            existingUnit.UnitTypes = request.Type;
 
-            );
-
-            // Add the new Unit to the repository
-            _unitRepository.Add(updatedUnit);
-            _unitOfWork.SaveChanges(); // Save changes asynchronously
+            // Update the Unit in the repository
+            _unitRepository.Update(existingUnit);
+            _unitOfWork.SaveChanges(); // Save changes
 
             return Task.FromResult(true); // Return true if the update was successful
         }
