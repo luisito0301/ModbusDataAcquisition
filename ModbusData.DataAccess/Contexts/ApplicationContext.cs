@@ -3,96 +3,61 @@ using ModbusData.Domain.Entities.Unit;
 using ModbusData.Domain.Entities.Variables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Sqlite.Infrastructure.Internal;
-using System.Drawing;
-using Microsoft.Data.Sqlite;
-
 using ModbusData.Domain.Entities.Modbus_Network;
-
+using ModbusData.DataAccess.FluentConfigurations.Devices;
+using ModbusData.DataAccess.FluentConfigurations.ModbusNetworks;
+using ModbusData.DataAccess.FluentConfigurations.Units;
+using ModbusData.DataAccess.FluentConfigurations.Variables;
 namespace ModbusData.DataAccess.Contexts
 {
-    /// <summary>
-    /// Define la estructura de la base de datos de la aplicación.
-    /// </summary>
     public class ApplicationContext : DbContext
     {
-        //Región destinada a la declaración de las tablas de las entidades base
         #region Tables 
-
-        /// <summary>
-        /// Tabla de clientes.
-        /// </summary>
-        public DbSet<Unit> Units { get; set; }
-        /// <summary>
-        /// Tabla de órdenes de compra.
-        /// </summary>
-        public DbSet<SlaveDevice> SlaveDevices { get; set; }
-        /// <summary>
-        /// Tabla de vehículos.
-        /// </summary>
         public DbSet<ModbusNetwork> ModbusNetworks { get; set; }
+        public DbSet<SlaveDevice> SlaveDevices { get; set; }
         public DbSet<Variable> Variables { get; set; }
-
+        public DbSet<Unit> Units { get; set; }
         #endregion
 
+        public ApplicationContext() { }
 
-        /// <summary>
-        /// Requerido por EntityFrameworkCore para migraciones.
-        /// </summary>
-        public ApplicationContext()
-        {
-        }
-
-        /// <summary>
-        /// Inicializa un objeto <see cref="ApplicationContext"/>.
-        /// </summary>
-        /// <param name="connectionString">
-        /// Cadena de conexión.
-        /// </param>
         public ApplicationContext(string connectionString)
-            : base(GetOptions(connectionString))
-        {
-        }
+            : base(GetOptions(connectionString)) { }
 
-        /// <summary>
-        /// Inicializa un objeto <see cref="ApplicationContext"/>.
-        /// </summary>
-        /// <param name="options">
-        /// Opciones del contexto.
-        /// </param>
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite();
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=modbusdata.db"); // Default connection string
+
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new SlaveDeviceEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ModbusNetworkEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AnalogicVariableEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new DigitalVariableEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new VariableEntityTypeConfigurationBase());
+
+    
         }
 
-
-        #region Helpers
 
         private static DbContextOptions GetOptions(string connectionString)
         {
-            return SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder(), connectionString).Options;
+            return new DbContextOptionsBuilder<ApplicationContext>()
+                .UseSqlite(connectionString)
+                .Options;
         }
-
-        #endregion
-
     }
 
-    /// <summary>
-    /// Habilita características en tiempo de diseño de la base de datos de la aplicación.
-    /// Ej: Migraciones.
-    /// </summary>
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>
     {
         public ApplicationContext CreateDbContext(string[] args)
@@ -101,13 +66,13 @@ namespace ModbusData.DataAccess.Contexts
 
             try
             {
-                var connectionString = "Data Source = ModbusDataAcquisitionDB.sqlite";
+                var connectionString = "Data Source=modbusdata.db"; // Consider moving to configuration
                 optionsBuilder.UseSqlite(connectionString);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //handle errror here.. means DLL has no sattelite configuration file.
-                throw;
+                // Log the exception or provide more context
+                throw new InvalidOperationException("Could not create a DbContext for design time.", ex);
             }
 
             return new ApplicationContext(optionsBuilder.Options);

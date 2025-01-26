@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.27" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.27" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.27">
       <PrivateAssets>all</PrivateAssets>
@@ -17,14 +18,18 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="FluentConfigurations\ModbusNetwork\" />
-    <Folder Include="FluentConfigurations\Device\" />
-    <Folder Include="FluentConfigurations\Variable\" />
-    <Folder Include="FluentConfigurations\Unit\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+    <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FluentConfigurations\Devices\SlaveDeviceEntityTypeConfiguration.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

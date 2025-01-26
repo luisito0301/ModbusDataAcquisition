@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModbusData.DataAccess\ModbusData.DataAccess.csproj" />
+    <ProjectReference Include="..\ModbusData.Domain\ModbusData.Domain.csproj" />
+    <ProjectReference Include="..\ModusData.Contracts\ModbusData.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SlaveDevice\" />
+  </ItemGroup>
+
+</Project>
