@@ -1,0 +1,31 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ModbusData.GrpcProtos";
+
+package GrpcProtos;
+
+// Mensaje para solicitudes de obtención por ID
+message GetRequest {
+    string id = 1;
+}
+
+// Mensaje para solicitudes de eliminación por ID
+message DeleteRequest {
+    string id = 1;
+}
+
+// Mensaje para representar una dirección IP
+
+// Enumeración para los tipos de variable
+enum VariableType {
+    Analogic = 0;
+    Digital = 1;
+}
+
+// Enumeración para los tipos de unidad
+enum UnitType {
+    Continuous = 0;
+    Discrete = 1;
+    Batch = 2;
+    Storage = 3;
+}
